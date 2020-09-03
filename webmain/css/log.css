@@ -1,0 +1,33 @@
+  body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{ margin:0; padding:0;}
+    body{ background-color: #efeff4;}
+
+    ul{ list-style-type: none;}
+    ul li{ float: left; overflow: hidden;}
+    #msgshowdivla{display: none !important;}
+    .big-img{ /*position: absolute; */
+    position: fixed;
+    z-index: 8;top: 0; left: 0; width: 100%; height: 100%; display: none; background-color: #000;}
+    th {font-weight: 500;}
+    .fR{    float: right;}
+    .hhhh{word-wrap:break-word;word-break:break-all;}
+    
+.showimage:hover{
+  transform: scale(10, 10);
+  transition: .3s transform;
+}
+.f10fR{font-size: 10px;/*text-align: right;*/}
+.f10fL{font-size: 10px;/*text-align: left;*/}
+.zhu {
+    color: #080707;
+}
+.stitle{padding:10px;border-bottom:1px #dddddd solid;font-size:16px;}
+.ydullist{display:inline-block;width:100%;}
+.ydullist li{float:left;width:16.6%;text-align:center;padding:5px 0px;font-size:12px;display:block;line-height:25px;padding-top:10px}
+.ydullist li:active{ background-color:#eeeeee}
+.ydullist li img,.faces{height:30px;width:30px;border-radius:15px}
+.ydullist li span{font-size:12px;color:#888888;}
+.pinglun td{padding:10px 0px}
+.pinglun .dt,.pinglun .act{font-size:12px;color:#888888;padding-top:5px}
+.pinglun .name{color:#555555}
+.pinglun tr{border-bottom: 1px solid #eeeeee;}
+.pinglun .sm{padding-top:8px;font-size:14px;word-break: break-all;}

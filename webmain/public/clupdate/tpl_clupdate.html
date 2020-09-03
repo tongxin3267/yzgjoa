@@ -1,0 +1,340 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?5"></script>
+<title><?=$da['title']?></title>
+<script language="javascript" src="js/floatsum.js"></script>
+<script language="javascript">
+var callback= '<?=$params['callback']?>',
+	showid  	= '<?php $params['showid']=$params['showid']?$params['showid']:'clupdate';echo $params['showid'];?>',
+	upkey  	= '<?=$params['upkey']?>';
+
+var clupdate={
+    clupdatearr:[],
+    wcarr:[],
+	alltotal:0,
+	bool:false,
+	moi:1,
+	init:function()
+	{
+		this.obj=$('#upfile');
+		var fmsg = '';
+		if(fmsg!='')fmsg=fmsg.substr(1);
+	},
+	add:function(form)
+	{
+        
+        var s='<div class="mdiv" upload="true" id="'+this.moi+'"  onclick="clupdate.delgoods('+this.moi+')">';
+        var d = {};
+        var flag=true;
+        var g = {"goods":"主材名称","yusuanprice":"预算单价","xuanyangprice":"选样单价","yusuannum":"预算数量","shijinum":"实际数量","explain":"备注"};
+        var t = $('#'+form).serializeArray();
+        s+='<div class="div04">'+this.moi+'</div>';
+        //1.变更金额=实际数量*选样单价-预算数量*预算单价  
+        $.each(t, function() {
+            d[this.name] = this.value;
+            if(!this.value&&this.name!='explain') {alert(g[this.name]+'不能为空'); flag=false;return false;}
+            if(this.name=='shijinum'){
+                s+='<div class="div04">'+this.value+'</div>';
+                //var cha=d['shijinum']*d['xuanyangprice']-d['yusuannum']*d['yusuanprice'];
+                // var cha=(Number(Number(d['shijinum']*d['xuanyangprice'])-Number(d['yusuannum']*d['yusuanprice']))).toFixed(2);
+
+
+                var cha=Number(accSub(accMul(d['shijinum'],d['xuanyangprice']),accMul(d['yusuannum'],d['yusuanprice']))).toFixed(2);
+
+
+                s+='<div class="div04">'+cha+'</div>';
+                d['cha'] = cha;
+
+            }else if(this.name=='explain'){
+                //var total=d['shijinum']*d['xuanyangprice']-d['yusuannum']*d['yusuanprice'];
+                // var total=(Number(Number(d['shijinum']*d['xuanyangprice'])-Number(d['yusuannum']*d['yusuanprice']))).toFixed(2);
+                var total=Number(accSub(accMul(d['shijinum'],d['xuanyangprice']),accMul(d['yusuannum'],d['yusuanprice']))).toFixed(2);
+                // clupdate.alltotal=clupdate.alltotal+total;
+                clupdate.alltotal=(accAdd(clupdate.alltotal,total)).toFixed(2);
+                //s+='<div class="div04">'+total+'</div>';
+                d['total'] = total;
+                s+='<div class="div04">'+this.value+'</div>';
+                //隐藏价格
+                s+='<input value="'+total+'" id="total'+clupdate.moi+'">';
+            }else{
+                s+='<div class="div04">'+this.value+'</div>';
+            }
+        });
+		s+='</div>';
+        if (flag) {            
+            this.obj.append(s);
+            clupdate.wcarr.push(d);
+            get('quebtn').disabled=false;   
+            $('#alltotal').html(clupdate.alltotal);
+            this.moi++;
+            alert('项目添加成功');
+            $("button[type='reset']").trigger("click");
+        }
+        //console.log(clupdate.alltotal);
+
+        //alert(JSON.stringify(d));
+        
+		//up.wcarr.push({id:result.id,filename:arr.filename,filetype:arr.filetype,fileext:arr.fileext,filesize:arr.filesize,filesizecn:arr.filesizecn,filepath:result.filepath,thumbpath:result.thumbpath,width:result.width,height:result.height});
+		return false;
+	},
+	rand:function()
+	{
+		var rand	= ''+js.now('d_His')+''+parseInt(Math.random()*9999)+'';
+		return rand;
+	},
+	del:function(o,oi)
+	{
+		$(o).parent().parent().remove();
+		this.filearr[oi]=false;
+		this.rexushow();
+		return false;
+	},
+    delgoods:function(id){
+       $('#'+id).addClass('red');         
+        js.confirm('删除将不能恢复，确定要<font color=red>删除</font>吗？',function(lx){
+            if(lx=='yes'){
+               //step1:重新计算总价
+                var total=$('#total'+id).val();   
+                clupdate.alltotal=clupdate.alltotal-total;
+                $('#alltotal').html(clupdate.alltotal);
+
+                //step2:移除该项目
+               $('#'+id).remove(); 
+               clupdate.wcarr.splice(id,1,"del")
+            }else{
+                $('#'+id).removeClass('red');         
+
+            }
+        });
+
+    },
+	clear:function()
+	{
+		$('#prou').hide();
+		this.wcarr  =[];
+		this.filearr=[];
+        this.alltotal  =0;
+        $('#alltotal').html(clupdate.alltotal);
+		this.obj.html('');
+	},
+	rexushow:function(){
+		var o	= $('#upfile').find('span');
+		for(var i=0;i<o.length;i++){
+			o[i].innerHTML=''+(i+1)+'. ';
+		}
+	},
+	getsid:function(a){
+		var sid = '',i;
+		for(i=0;i<a.length;i++){
+			sid+=','+a[i].id+'';
+		}
+		if(sid!='')sid = sid.substr(1);
+		return sid;
+	},
+	okla:function(){
+		var sid = this.getsid(this.wcarr);
+        var totalprice = $('#totalprice').val();
+        if(!totalprice) {alert('商定总价不能为空');return false;}
+
+		<?php if($callback!=''){?>try{parent.<?=$callback?>(this.wcarr,js.request('params1'), js.request('params2'), sid)}catch(e){}<?php }?>
+		if(showid!=''){
+			try{parent.js.clupdateshow(this.wcarr, showid, totalprice,this.alltotal);}catch(e){}
+			try{opener.js.clupdateshow(this.wcarr, showid, totalprice,this.alltotal);}catch(e){}
+		}
+		this.closeaa();
+	},
+	closeaa:function(){
+		window.close();
+		try{parent.js.tanclose('clupdatewin')}catch(e){}
+	}
+}
+window.onbeforeunload=function(){
+	if(clupdate.bool)return '文件正在上传，确定要关闭页面吗？';
+}
+
+$(function(){
+    var mobile_flag = isMobile(); // true为PC端，false为手机端
+    if(mobile_flag){
+        $('#pc').hide();
+    }else{
+        $('#mobile').hide();
+    }
+});
+
+function isMobile() {
+    var userAgentInfo = navigator.userAgent;
+
+    var mobileAgents = [ "Android", "iPhone", "SymbianOS", "Windows Phone", "iPad","iPod"];
+
+    var mobile_flag = false;
+
+    //根据userAgent判断是否是手机
+    for (var v = 0; v < mobileAgents.length; v++) {
+        if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
+            mobile_flag = true;
+            break;
+        }
+    }
+
+     var screen_width = window.screen.width;
+     var screen_height = window.screen.height;    
+
+     //根据屏幕分辨率判断是否是手机
+     if(screen_width < 500 && screen_height < 800){
+         mobile_flag = true;
+     }
+
+     return mobile_flag;
+}
+
+</script>
+<style type="text/css">
+button{cursor:pointer}
+.alert{ padding:1px 5px; border:1px #996 solid; background-color:#ffffff; color:#933}
+*{ font-size:14px;font-family:微软雅黑,Verdana, Geneva, sans-serif;}
+.mdiv{ border-bottom:1px #cccccc solid; height:22px; overflow:hidden}
+.mdiv div{ float:left; height:22px; line-height:22px; overflow:hidden; padding:0px 3px}
+.div01{ width:55%;text-align:left;border-right:1px #cccccc solid;}
+.div02{ width:15%; text-align:center;border-right:1px #cccccc solid;}
+.div03{ width:25%;text-align:left}
+.div04{ width:10.5%;text-align:left}
+.div05{ width:100%;text-align:right}
+.div06{ width:40%;text-align:left}
+#prou{overflow:hidden; background-color:#ffffff; margin:5px 0px; border:1px #666 solid;padding:0px; text-align:left;font-size:12px; position:relative; height:18px;line-height:18px}
+#prou span{ left:5px; position:absolute; top:2px}
+#proudiv{ position:absolute; left:0px; top:0px; height:18px; overflow:hidden; background-color:#09F;width:0%}
+button{ cursor:pointer}
+#footmsg{ text-align:left; padding:3px}
+.quebntha{position:fixed;right:10px;bottom:10px;}
+.webbtn{color:#ffffff;opacity:0.8; background-color:#1abc9c; padding:5px 8px; border:none; cursor:pointer;font-size:14px}
+.webbtn:disabled{background-color:#aaaaaa; color:#eeeeee}
+.webbtn:hover{box-shadow:0px 0px 5px rgba(0,0,0,0.3);opacity:1}
+.lurim {
+    text-align: right;
+    padding: 0px 5px;
+}
+.divinput {
+    padding: 2px;
+    background-color: white;
+}
+td, button {
+    font-size: 12px;
+}
+</style>
+</head>
+<body style="padding:1px" onLoad="clupdate.init()">
+<center>
+<div style="padding:10px">
+<form name="myform" id="form1">
+    <div style="background:white;padding-top:10px">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="lurim" nowrap="">主材名称:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" id="goods" name="goods"  placeholder="（手动填写）">                           
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">预算单价:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                        	<input class="inputs" type="text" value="" name="yusuanprice" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">选样单价:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                        	<input class="inputs" type="text" value="" name="xuanyangprice" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">预算数量:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" name="yusuannum" placeholder="（手动填写）"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">实际数量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                        	<input class="inputs" type="text"  name="shijinum" placeholder="（手动填写）"></div>
+                    </td>
+                </tr><!-- 
+                <tr>
+                    <td class="lurim" nowrap="">变更金额:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" id="cha"  name="cha" placeholder="（数据自动生成）"></div>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="clupdate.add('form1')">＋添加</button></tfoot>
+        </table>
+    </div>
+</form>
+<div style="overflow:hidden; height:25px;padding-top:3px">1.变更金额=实际数量*选样单价-预算数量*预算单价                                                                                     
+</div>
+</div>
+<div align="left" style="padding:3px"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    </td><button type="button" class="webbtn" id="clearbtn" onClick="clupdate.clear()">－清除所有项目</button>&nbsp; <button type="button" class="webbtn" onClick="clupdate.closeaa()">关闭</button></td>
+    <td align="right" style="display:none"><button type="button" class="webbtn" id="startbtn" onClick="clupdate.upload()">开始上传</button></td>
+  </tr>
+</table>
+<div style="overflow:hidden; height:5px"></div>
+<div id="prou" style="display:none"><div id="proudiv"></div><span id="proushow">等待上传...</span></div>
+<div class="mdiv" style="background-color:#eeeeee">
+<div class="div04">序号</div>
+<div class="div04">主材名称</div>
+<div class="div04">预算单价</div>
+<div class="div04">选样单价</div>
+<div class="div04">预算数量</div>
+<div class="div04">实际数量</div>
+<div class="div04">变更金额</div>
+<div class="div04">备注</div>
+</div>
+<div id="upfile"></div>
+<div id="footmsg">
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">合计：</div>
+        <div class="div06" id="alltotal"></div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">商定总价：</div>
+        <div class="div06" style="height: 30px">
+            <div class="divinput" style="height: 30px" >
+                <input class="inputs" type="text" id="totalprice"  style="line-height: 30px;" 
+                name="totalprice" placeholder="（手动填写）"></div>
+        </div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div05" style="height: 30px"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="clupdate.okla()">√制作完成</button></div>
+    </div>
+</div>
+<div style="overflow:hidden; height:50px" id="mobile"></div>
+<div style="overflow:hidden; height:110px" id="pc"></div>
+
+<!-- 
+<div class="quebntha"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="clupdate.okla()">√制作完成</button></div> -->
+</center>
+</body>
+</html>

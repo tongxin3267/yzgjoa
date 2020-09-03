@@ -1,0 +1,347 @@
+.menulist div {
+    padding: 6px 0px;
+    font-size: 14px;
+    text-align: center;
+}
+.djs {opacity: 0.7;
+    font-size: 10px;
+    position: absolute;
+    top: 35px;
+    left: 40%;
+    padding: 1px 3px;
+    color: black;
+}
+.contlist .zt {
+    font-size: 10px;
+    position: absolute;
+    top: 35px;
+    right: 0px;
+    padding: 2px 3px;
+    background: none;
+    color: black ;
+}
+.contlist .brand {
+        font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    padding: 2px 2px;
+    background: none;
+    color: #0572AD;
+}
+#uploadwin_main{z-index: 9999 !important;}
+.title{    background-color: #48c9b0;}
+#uploadwin_title{    padding-left: 18px !important;}
+#uploadwin_spancancel{    padding-right: 20px !important;}
+.aliago {
+    position: fixed;
+    top: 0;
+    background: #fff;
+    width: 100%;
+    z-index: 1000;
+    border: 1px solid #fff;
+}
+.share {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #555;
+    width: 100%;
+    height: 100%;
+    opacity: .8;
+    z-index: 10;
+}
+#tan {
+    display: none;
+}
+.weui_search_bar:after{	
+    border: none;
+}
+#done{    width: 20%;}
+.mui-table-view-cell:after{background:none;}
+#showblank1 {
+    color: #0572AD;}
+	
+	/*2020.3.8.新增样式*/
+	.list-single{
+		background-color: #fff;
+		margin: 10px;
+		padding:8px 10px;
+		position: relative;
+		overflow: hidden;
+	}
+	.host-head,
+	.owner-head{
+		overflow: hidden;
+		padding:7px 0;
+		border-bottom:1px solid #e6e6e6;
+		position: relative;
+	}
+	.contlist .cont{    padding: 2px 0px;
+    border-top: solid 1px #efefef;
+    border-bottom: solid 1px #efefef;}
+	.list-single .head-img{
+		width:28px;
+		height:28px;
+		border-radius: 50%;
+		float: left;
+		margin-right:5px;
+	}
+	.host-head h2,
+	.owner-head h2{
+		font-size: 15px;
+	}
+	.host-head .name{
+		font-size: 14px;
+	}
+	.host-head .app-color{
+		color:#0572AD;
+	}
+	.company-name{
+	 color:#0572AD;
+	 font-size: 13px;
+	}
+	.host-body{
+		overflow: hidden;
+		padding-bottom:8px;
+		border-bottom:1px solid #e6e6e6;
+		color:#5A5A5A;		
+    padding-left: 24px;
+	}
+	.host-body .col-30{
+		width:24%;
+		float: left;
+	}
+	.host-body .host-img{
+		width:90%;
+		border-radius: 10px;
+	}
+	.host-body .col-70{
+		width:76%;
+		float: left;
+	}
+	
+	.type-btn{
+		padding:2px 3px;
+		text-align: center;
+		border:1px solid #e6e6e6;
+		display: inline-block;
+		font-size: 12px;
+	}
+	.ld-left{
+		display: inline-block;
+		border-left:1px solid #e6e6e6;
+		margin-left:5px;
+		padding:0 8px;
+	}
+	.host-foot{
+		/*padding:8px 0 0 10px;
+		text-align: right;*/
+		font-size: 10px;
+		/*padding-top: 10px;*/
+	}
+	.host-foot .btn-details{
+		padding:1px 5px;
+		text-align: center;
+		border:1px solid #e6e6e6;
+		display: inline-block;
+	    position: absolute;
+	    bottom: 3px;
+	    color: #5A5A5A;
+	    right: 3px;
+	}
+	.mT5{
+		margin-top:5px;
+	}
+	.host-time{
+		font-size: 12px;
+		color: #5A5A5A;
+	}
+	.color-hui{
+		color: #5A5A5A;
+	}
+	.fl{
+		float: left;
+	}
+	.fr{
+		float: right;
+	}
+	.fs12{
+		font-size: 12px;
+	}
+	.width100{
+		width:100%;
+	}
+	.di-block{
+		display: inline-block;
+		font-size: 10px;
+		color: #aaaaaa;
+	}
+	.mR20{
+		margin-right:20px;
+	}
+	.owner-body{
+		border-bottom:1px solid #e6e6e6;
+		padding-bottom:10px;
+	}
+	.owner-head .company-name{
+		position: absolute;
+		top:9px;
+		right:2px;
+	}
+	.cont{
+		width:100%;
+		padding-left:33px;
+		font-size: .6rem;
+	}
+	.cont .icon-btn{
+		width: 15px;
+		height: 14px;
+		display: inline-block;
+		margin-right:3px;
+		text-align: center;
+		line-height: 15px;
+	}
+	.cont .price-btn{
+		background-color: #f5a51d;
+		color: #fff;
+		font-size: 12px;
+	}
+	.cont .time-btn{
+		background-color: #f52e1d;
+	}
+	.cont .time-btn img{
+		width:12px;
+		height:12px;
+		padding: 1px
+	}
+	.cont .price-btn img{
+		width:12px;
+		height:12px;
+		padding: 1px
+	}
+	.app-color {
+	    color: #0572AD;
+	}
+	.color-red{
+		color:#ef0b2a;
+		font-size: 1rem;
+	}
+	.host-name{
+		padding-top:10px;
+		font-size: .8rem;
+		padding-left:33px;
+	}
+	.mR10{
+		margin-right:1Opx;
+	}
+	.dealing-people{
+		font-size: 12px;
+		padding-left:33px;
+	}
+	.pl20{		padding-left:29px !important;}
+	.pl30{		padding-left:28px !important;}
+	.dealing-people .color-red{
+		font-size: 12px;
+	}
+	.tk-bg{
+		width:100%;
+		height:100%;
+		background: rgba(0,0,0,0.6);
+		position: absolute;
+		top:0;
+		left:0;
+		z-index:999;
+		display: none;
+	}
+	.tk-close{
+		position: absolute;
+		width: 30px;
+		height:30px;
+		bottom:10%;
+		margin-left:auto;
+		margin-right:auto;
+		left:0;
+		right:0;
+		z-index:1000;
+	}
+	.tk-close img{
+		width: 100%;
+		height:100%;
+	}
+	.tk-content{
+		width:70%;
+    max-height: 60%;
+    height: auto;
+		overflow-y: auto;
+		display: none;
+	}
+	.face{
+	    width: 80%;
+	    overflow: hidden;
+	    white-space: nowrap;
+	    display: block;
+	    text-overflow: ellipsis;
+	}
+	.tk-same{
+		margin: auto;
+		left:0;
+		right:0;
+		top:0;
+		bottom:0;
+		z-index:1000;
+		position: absolute;
+		background-color: #fff;
+	}
+	.tk-remark{
+		padding:15px;
+	}
+	.tk-remark h3{
+		font-size: 15px;
+   		padding: 10px 0px
+	}
+	.tk-remark .remark-one{
+		margin-bottom:15px;
+	}
+	.tk-remark .remark-text{
+		font-size: 13px;
+		line-height: 20px;
+		color: #2c2c2c;
+	}
+	.tk-remark .remark-name{
+		padding:3px 8px;
+		background-color: #f5f5f5;
+		color: #707070;
+		font-size: 10px;
+	}
+	.tk-remark .zhanw{
+		display: inline-block;
+		margin:0 5px;
+	}
+	.tk-head{
+		width:40%;
+		height:245px;
+		display: none;
+	}
+	.tk-head ul{
+		overflow: hidden;
+	}
+	.tk-head ul li{
+		width:100%;
+		height:34px;
+		line-height: 34px;
+		border-bottom:1px solid #e6e6e6;
+		text-align: center;
+		font-size: 13px;
+	}
+	.tk-head ul li a{
+		display: block;
+		color: #000;
+		text-decoration: none;
+	}
+	.tk-head ul li a.color-r{
+		color: red;
+	}
+	.tk-head ul li a.color-b{
+		color: #1943fa;
+	}

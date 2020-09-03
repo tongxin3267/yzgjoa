@@ -1,0 +1,1000 @@
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'项目名称',
+		'title',
+		'text',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'当前审核进度',
+		'courseid',
+		'text',
+		'0',
+		NULL,
+		'0',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'单据编号',
+		'num',
+		'num',
+		'0',
+		NULL,
+		'0',
+		'XM-',
+		'0',
+		'0',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'工程监理',
+		'author',
+		'changeusercheck',
+		'0',
+		NULL,
+		'0',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'业主姓名',
+		'chuban',
+		'changeuser',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'开始时间',
+		'cbdt',
+		'date',
+		'7',
+		'{date}',
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'总合同价格',
+		'price',
+		'number',
+		'6',
+		'0',
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'说明',
+		'explain',
+		'textarea',
+		'20',
+		NULL,
+		'0',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'装修地址',
+		'weizhi',
+		'text',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'客户来源',
+		'customersource',
+		'text',
+		'0',
+		NULL,
+		'0',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'第三方协议',
+		'thirdpro',
+		'select',
+		'0',
+		NULL,
+		'0',
+		'已签,未签,其它',
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'联系方式',
+		'telephone',
+		'number',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'17',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'预计结束时间',
+		'endtime',
+		'date',
+		'7',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		'gt|{cbdt}|'
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'房屋面积',
+		'housesize',
+		'number',
+		'0',
+		'80',
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'房屋类型',
+		'housetype',
+		'select',
+		'0',
+		NULL,
+		'1',
+		'独栋别墅,联排别墅,大复式,小复式,大平层,三房,两房,一房,其它',
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'预算类型',
+		'budgettype',
+		'select',
+		'0',
+		NULL,
+		'1',
+		'包工包料,部分承包,清包',
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'含水电价',
+		'telwatpri',
+		'number',
+		'6',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		'lt|{price}|'
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'设计师',
+		'designer',
+		'changeusercheck',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'设计师承诺',
+		'designerpromise',
+		'textarea',
+		'21',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'门店经理',
+		'mdarea',
+		'changeuser',
+		'0',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'内部编号',
+		'nbbh',
+		'text',
+		'-1',
+		NULL,
+		'1',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'预算员',
+		'htys',
+		'changeuser',
+		'0',
+		NULL,
+		'0',
+		NULL,
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'100',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'区域',
+		'routelin',
+		'selectcity',
+		'-1',
+		NULL,
+		'0',
+		'citydata',
+		'1',
+		'0',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'区域',
+		'routeline',
+		'text',
+		'-1',
+		NULL,
+		'1',
+		NULL,
+		'0',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+
+INSERT INTO `xinhu_flow_element` (
+	`mid`,
+	`name`,
+	`fields`,
+	`fieldstype`,
+	`sort`,
+	`dev`,
+	`isbt`,
+	`data`,
+	`islu`,
+	`iszs`,
+	`attr`,
+	`iszb`,
+	`isss`,
+	`lattr`,
+	`width`,
+	`lens`,
+	`savewhere`
+)
+VALUES
+	(
+		'22',
+		'品牌',
+		'yzbrand',
+		'checkboxall',
+		'0',
+		'0',
+		'1',
+		'0|元贞国际设计,1|贞筑豪宅装饰,2|梦依达软装',
+		'1',
+		'1',
+		NULL,
+		'0',
+		'0',
+		NULL,
+		NULL,
+		'0',
+		NULL
+	);
+

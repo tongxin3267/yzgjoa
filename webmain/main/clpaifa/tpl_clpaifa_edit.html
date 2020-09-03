@@ -1,0 +1,651 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/log.css">
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?4"></script>
+
+
+<div align="center">
+<!-- <div  style="padding:10px;width:700px"> -->
+<table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%">
+    <tbody>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">业主姓名</td>
+            <td class="ys2" colspan="3" style="text-align:left;"><?=$gongdiinfo['chuban']?></td><!-- 
+            <td align="left" class="ys1" style="text-align:center;">联系方式</td>
+            <td class="ys2" style="text-align:left;"><a href="tel:<?=$gongdiinfo['telephone']?>" class="hhhh"><?=$gongdiinfo['telephone']?></a></td> -->
+        </tr>
+        <tr>
+            <td class="ys1" height="34" align="left" style="text-align:center;">项目名称</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$gongdiinfo['title']?></td>
+        </tr>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">装修地址</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$gongdiinfo['weizhi']?></td>
+        </tr>
+        <tr>
+            <td align="left" class="ys1" width="22%"  height="34" style="text-align:center;">工程监理</td>
+            <td class="ys2" width="30%" style="text-align:left;"><?=$gongdiinfo['author']?></td>
+            <td height="34" align="left" class="ys1" style="text-align:center;">联系方式</td>
+            <td class="ys2" style="text-align:left;"><?=$mobile?></td>
+        </tr>
+    </tbody>
+</table>
+
+
+    <form name="myform">
+        <div style="overflow:hidden; height:20px"></div>
+
+                 <?php 
+                    if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+                    <div style="overflow:hidden; height:20px" > <a href="javascript:showAddInput();">添加数据</a></div><?php }?>
+        
+
+        <table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" style="text-align: center;"  id="table">
+
+            <thead>
+                <th height="34"  >材料名称</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>单价</th>
+                <th>小计</th>                
+                <th >备注</th>
+                 <?php 
+                    if($adminid!=$gongdiinfo['clgysid']){ ?><th>操作</th><?php }?>
+                
+            </thead>
+            <tbody>
+             <?php 
+                if(!empty($gongdiinfo['goods'])){
+                    $goodslist=json_decode($gongdiinfo['goods']);
+						if(!empty($goodslist)){
+							foreach($goodslist as $kk=>$rrs){
+								$ll=json_decode(json_encode($rrs),TRUE);
+								if(isset($ll['goods'])&&$ll['goods']!='d'){ ?> 
+									<tr height="34">
+										<td style="  max-width: 100px;"><?=$ll['goods']?></td>
+										<td><?=$ll['paifanum']?></td>
+										<td><?=$ll['unit']?></td>
+										<td><?=$ll['price']?></td>
+										<td><?=$ll['total']?></td>
+										<td style="max-width: 100px;"><?=$ll['explain']?></td>
+
+										 <?php 
+											if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+										<td><a style="color:blue;cursor:pointer;font-size: 4px;" onclick="updateRow(this);" >修改<a> <a style="color:blue;cursor:pointer;;font-size: 4px;" onclick="delRow(this);">删除</a></td><?php }?>
+									</tr>
+								<?php } ?> 
+						<?php } ?> 
+					<?php } ?> 
+                <tr>
+                    <td ><?=$gongdiinfo['clgysname']?></td>
+                    <td height="34" class="ys1" colspan="2"  style="text-align:center;">合计</td>
+                    <td class="ys2" id="alltotal" >￥<?=$gongdiinfo['alltotal']?></td>
+                    <td align="left" class="ys1" style="text-align:center;">商议价</td>
+                    <td 
+                        <?php 
+                        if($adminid!=$gongdiinfo['clgysid']){ ?> colspan="2" <?php } ?> >
+                        <?php 
+                        if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+                        <input type="" name="totalprice" id="totalprice" placeholder="<?=$gongdiinfo['totalprice']?>" value="<?=$gongdiinfo['totalprice']?>">
+                        <input type="hidden" name="type" id="type" placeholder="<?=$gongdiinfo['type']?>" value="<?=$gongdiinfo['type']?>">
+                        <?php }else{ echo "￥".$gongdiinfo['totalprice'];}?>
+                    </td>
+                </tr>
+            <?php } ?> 
+
+
+            
+    <?php 
+    if($adminid==$gongdiinfo['clgysid']&&($gongdiinfo['status']==0||$gongdiinfo['status']==2)){ 
+        $text1="尊敬的合作伙伴，请将您的材料务必整齐摆放到工地指定的位置。<br>";
+        $clpaifarr=array('基础供货商'=>'基础供货商：水泥黄沙等指定区域为施工量较少的卧室；包管道红砖指定区域为相应的卫生间及厨房；隔墙红砖指定区域为砌墙区域的相应角落。',
+                        '水电供货商'=>'水电供货商：水电材料，木工五金，泥工五金指定区域为现场货架。',
+                        '木材供货商'=>'木材供货商：板材指定区域为工作量较少的卧室；轻钢龙骨及白送条指定区域为墙面三角架；配件小件材料指定区域为现场货架。',
+                        '油漆供货商'=>'油漆供货商：油漆材料指定区域为施工量较少的卧室；油漆小材料指定区域为现场货架。',
+                        );
+        $text2="<br>违者按每次200乐捐，跪求大家配合。";
+    ?>
+            <tr>
+                <td class="tdys1"><div  align="right" style="color:#555555">温馨提示：</div></td>
+                <td class="tdys1" colspan="4" style="padding:5px"><div align="left" style="color: gray;font-size: 14px"><?php  echo $text1;$clgysname=$gongdiinfo['clgysname'];echo  $clpaifarr[$clgysname];echo $text2;?></div></td>
+            </tr>
+            <tr>
+                <td class="tdys1"><div  align="right" style="color:#555555">备注：</div></td>
+                <td class="tdys1" colspan="4" style="padding:5px"><div align="left"><textarea class="textarea" name="check_explain" style="width:95%;height:60px"  placeholder="现场相关情况说明"></textarea></div></td>
+            </tr>
+            <tr><td class="tdys1">到货凭证：</td>
+                <td colspan="4" class="ys2">
+                <input name="check_fileid" type="hidden" id="fileidview-inputEl" value="">
+                <div id="view_fileidview" style="width:97%;height:80px;border:1px #cccccc solid;color: #757575; background:white;overflow:auto">
+                    请上传材料到货验收单及现场材料摆放图片。
+                </div>
+                <div id="fileupaddbtn"><a href="javascript:;" class="blue" onclick="c.upload()"><u>＋添加文件</u></a></div>
+                </td></tr> 
+            <tr>
+
+    <?php }else{ ?> 
+
+            <?php 
+            if(!empty($gongdiinfo['explain'])){ ?>
+                <tr>
+                    <td height="34" style=" min-width: 11px;"class="ys1">材料商备注
+                    </td>
+                    <td colspan="4"><?=$gongdiinfo['explain']?>
+                    </td>
+                </tr> 
+            <?php }     ?>
+
+            <?php 
+            if(!empty($gongdiinfo['xgwj'])){ ?>
+                <tr>
+                    <td height="34" class="ys1">到货凭证
+                    </td>
+                    <td colspan="4" height="34" align="left" class="ys1">
+                    <?php 
+                        $hello = explode(',',$gongdiinfo['xgwj']);
+                        for($index=0;$index<count($hello);$index++) 
+                        { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            }else{
+                                $i2=$i;
+                            }
+                        ?>
+                            <a href="javascript:" onclick="return js.downshow(<?=$hello[$index]?>)" style="color:blue"><u>下载该文件</u></a>
+                            <img src="<?=$i2?>" width="50px" class="showimage"><br> 
+                    <?php 
+                        $i='';
+                        } 
+                    ?>
+                    </td>
+                </tr>
+            <?php }     ?>
+
+    <?php }     ?>
+            </tbody>
+        </table> 
+
+	</div>
+    </form>
+
+
+<?php 
+    if($adminid!=$gongdiinfo['clgysid']){ ?>
+<div style="display:none" id="addinfo">
+<form>
+    <div style="background:white;padding-top:10px">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="lurim" nowrap="">材料名称:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="goods" placeholder="（手动填写）" id="goods"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">配送数量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="paifanum" placeholder="（手动填写）" id="paifanum"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">单位:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="unit" placeholder="m、㎡、项、只" id="unit"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">单价:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="price" placeholder="（手动填写）" id="price"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain" id="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right">
+                <input type="button" class="webbtn" value="保存" onclick="addInfo()" id="btn_add">
+                <input type="button" class="webbtn" value="保存" onclick="updateInfo()" style="display:none" id="btn_update">
+                <input type="button" class="webbtn" value="取消" onclick="hideAddInput()">
+<!-- 
+             <button type="button" class="webbtn" id="addbtn" onClick="clpaifa.add('form2')">＋添加</button></tfoot>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="clpaifa.add('form2')">＋添加</button></tfoot> -->
+        </table>
+    </div>
+</form>
+<?php }?>
+</div>
+    <div class="fR" >
+     <?php 
+        if($adminid==$gongdiinfo['clgysid']&&($gongdiinfo['status']==0||$gongdiinfo['status']==2)){ 
+            if($gongdiinfo['type']==0){ ?>
+                <button type="button" class="webbtn" onclick="c.paifa(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);">配送处理</button>
+            <?php }else{ ?> 
+                <button type="button" class="webbtn" onclick="c.paifa(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);">退货处理</button>
+            <?php  
+                }  
+    } else { 
+
+        switch ($gongdiinfo['status']) {
+        //0配送申请提交，1材料商已配送，2退货申请提交，3材料商已退货
+            case '0':
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >配送申请提交</button>'; 
+                break;
+            case '1':
+                if($da['progress']==6) echo '<div style="padding: 8px 10px;    color: #1ABC9C;" >已取消</div>'; 
+                else   echo '<div style="padding: 8px 10px;color: #1ABC9C;" >材料商已配送</button>'; 
+                break;
+            case '2':
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >退货申请提交</button>'; 
+                break;
+            case '3':
+                if($da['progress']==6) echo '<div style="padding: 8px 10px;    color: #1ABC9C;" >已取消</div>'; 
+                else  echo '<div style="padding: 8px 10px;    color: #1ABC9C;" >材料商已退货</button>'; 
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+    } ?> 
+    </div>
+
+     <?php 
+        if($adminid!=$gongdiinfo['clgysid']){ ?>
+            <div class="fR">    
+                <button type="button" id="savebutton" style="display: none" class="webbtn" onclick="c.save(<?=$gongdiinfo['id']?>);">保存修改</button>
+            </div>
+        <?php }
+
+        //管理员和徐鹏飞可以取消
+        if($gongdiinfo['status']==0&&($adminid==1||$adminid==15)){ ?> 
+
+            <div><textarea  name="remark" id="remark" placeholder="请说明取消原因" style="
+    width: 400;
+    padding: 10px;
+    margin: 10px;"></textarea></div>
+
+            <div class="cpt-btn fR " onclick="c.cancel(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);" style="
+    background-color: #0572ad;
+    padding: 10px;
+    margin-right: 10px;
+    color: white;">取消</div>
+    <?php
+        }
+    ?>
+
+</div>
+
+    </div>
+
+        <div class="blank10"></div>
+
+    <?php    
+    if($logarr){
+    ?>
+    <div onclick="c.changeshow(0)" class="stitle zhu">工作日志(<?=count($logarr)?>) <img align="absmiddle" height="16" width="16" src="images/xiangyou1.png"> </div>
+    <div id="showrecord0" class="pinglun" style="display:none">
+    <table width="100%">
+    <?php 
+    foreach($logarr as $k=>$rs){
+        $explain=nl2br($rs['explain']); 
+        $s = '<tr valign="top">';
+        $s.= '<td align="center" width="45"><img src="'.$rs['face'].'" class="faces"></td>';
+        $s.= '<td>';
+        $s.= '<div class="name">'.$rs['name'].'<span class="act">['.$rs['actname'].']</span><font color="'.$rs['color'].'">'.$rs['statusname'].'</font></div>';
+        $s.= '<div class="dt">'.$rs['optdt'].'</div>';
+        $s.= '<div class="sm">'.$explain.'</div>';
+        $filed ='';
+        if(!empty($rs['fileid'])){
+            $hello = explode(',',$rs['fileid']); 
+            $s.='<ul class="img-lt">';
+            for($index=0;$index<count($hello);$index++) 
+            { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $s.='<li class="animated bounceIn '.$hello[$index].'" id="'.$hello[$index].'" data-id="'.$i.'" style="width:88px; height:88px; padding-left:0px; padding-top:2px;">';
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'||$nnn[1]=='jpeg'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            $s.= '<img src="'.$i2.'" width="88px"  height="88px" class="showimage"  data-preview-src="'.$i.'" data-preview-group="1" >';
+                            }else if($nnn[1]=='pdf'){
+                                $i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }else{
+                                //$i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $i2="'http://oa.yuazen.cn/".$nnn[0].".html'";
+                                //$i2="'http://localhost:89/".$nnn[0].".html'";
+
+                                //$s.= '<a href="javascript:" onclick="window.location.href='.$i2.'" style="color:blue"><u>预览文件</u></a><br>';
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }
+                //$s.= '</li>';
+                        $i='';
+                        $i2='';
+                        $nnn='';
+            }
+            $s.='</ul>';
+        }
+
+        $s.= '</td>';
+        $s.= '</tr>';
+        echo $s;
+    }
+    ?>
+    </table>
+    </div>
+    <div class="blank10"></div>
+    <?php }?>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+
+<script type="text/javascript">
+    
+var c={
+    paifa:function(id,type){
+
+        var xgwj =form('check_fileid').value;
+        var explain =form('check_explain').value;
+        if(xgwj==''){alert('请上传相关图片');return;}
+
+        $.get(js.getajaxurl('editsave','clpaifa','main',{id:id,type:type,xgwj:xgwj,explain:explain}), function(da){
+            alert(da);
+            c.refresh();/*
+            var url = 'index.php?a=publicstore&m=clpaifa&d=main&ajaxbool=true';
+
+            parent.js.location(url);*/
+
+            parent.js.tanclose('clupdatewin');            
+        });
+        return false;
+    var url = 'index.php?m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    save:function(id){
+    console.log(goods,alltotal);
+        pricetotal();
+        totalprice= $('#totalprice').val();
+        type= $('#type').val();
+
+        $.get(js.getajaxurl('editsave2','clpaifa','main',{id:id,goods:JSON.stringify(goods),alltotal:alltotal,totalprice:totalprice,type:type}), function(da){
+            alert(da);
+           // c.refresh();
+           /*
+            var url = 'index.php?a=publicstore&m=clpaifa&d=main&ajaxbool=true';
+
+            parent.js.location(url);*/
+
+            parent.js.tanclose('clupdatewin');            
+        });
+        return false;
+    var url = 'index.php?m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    tuihuo:function(cid,fid){
+    var url = 'index.php?a=tuihuo&m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+       // js.winiframe('材料配送', url);
+        return false;
+    },
+    cancel:function(id,type){
+        var remark =$("#remark").val();
+        if(remark==''){alert('请输入取消原因');return;}
+          var r=confirm("你确定要取消吗？取消后不可恢复")
+          if (r==true)
+            {
+                $.get(js.getajaxurl('cancel','clpaifa','main',{id:id,type:type,remark:remark}), function(da){
+                    alert("已取消");
+                    c.refresh();
+
+                    parent.js.tanclose('clupdatewin');            
+                });
+            }
+        return false;
+    },
+    refresh:function(){
+        js.msg('wait', '更新中...');
+        $.get(parent.js.getajaxurl('updatedata','clpaifa','main'), function(da){
+            js.msg('success', da);
+        });
+    },
+    upload:function(){
+        js.upload('',{showid:'fileidview'});
+    },
+    changeshow:function(lx){
+        $('#showrecord'+lx+'').toggle();
+    },
+};
+</script>
+
+<script type="text/javascript">
+   var row = 0 ; //定义全局行数用于修改
+    var goods = [],alltotal=0;
+
+var reg_email = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; //用于判断邮箱格式
+var reg_name = /^((\w*\d\w*[a-z]\w*)|(\w*[a-z]\w*\d\w*))$/i; //用于判断用户名格式
+var reg_chinese = /^[\u0391-\uFFE5]+$/ ; //用于判断姓名格式
+var reg_pass = /^((\w*\d\w*[a-z]\w*)|(\w*[a-z]\w*\d\w*))$/i;//用于判断密码格式
+//----获取行号-----
+function getRow(r){
+ var i=r.parentNode.parentNode.rowIndex; 
+ return i ;
+}
+//----获取行号-----
+ 
+//----删除某一行-----
+function delRow(r){ 
+    $('#savebutton').show();
+
+    if(confirm("确定删除该行材料派发?")){ 
+        document.getElementById('table').deleteRow(getRow(r));
+     } 
+    pricetotal();
+
+
+}
+//----删除某一行-----
+ 
+//----清除添加信息框的内容-----
+function cleanAddInput(){
+ document.getElementById('goods').value='';
+ document.getElementById('paifanum').value=''; 
+ document.getElementById('unit').value='';
+ document.getElementById('price').value='';
+ document.getElementById('explain').value='';
+}
+//----清除添加信息框的内容-----
+ 
+//----显示添加信息框-----
+function showAddInput(){
+ document.getElementById('addinfo').style="display:block-inline" ;
+ document.getElementById('btn_add').style="display:block-inline" ;
+ document.getElementById('btn_update').style="display:none" ;
+ cleanAddInput(); 
+}
+//----显示添加信息框-----
+ 
+//----隐藏添加信息框-----
+function hideAddInput(){
+ document.getElementById('addinfo').style="display:none" ;
+ $('#savebutton').show();
+ 
+ 
+}
+//----隐藏添加信息框-----
+ 
+//----判断输入框的信息是否符合要求-----
+function judge(){
+ //根据id获取表单信息
+ var goods = document.getElementById('goods').value;
+ var paifanum = document.getElementById('paifanum').value; 
+ var unit = document.getElementById('unit').value;
+ var price = document.getElementById('price').value;
+ var explain = document.getElementById('explain').value;
+ var judge = true ; //用于判断表单信息是否符合
+
+ if(goods==''){
+  judge = false ;
+  alert('请输入材料名称');
+ }else if(paifanum==''){
+  judge = false ;
+  alert('请输入派发数量');
+ }else if(unit==''){
+  judge = false ;
+  alert('请输入单位');
+ }else if(price==''){
+  judge = false ;
+  alert('请输入单价');
+ }
+  
+ return judge ;
+}
+//----判断输入框的信息是否符合要求-----
+ 
+//----新增信息的插入方法-----
+function insertInfo(){
+ //根据id获取表单信息
+ var arr = new Array();
+ arr[0] = document.getElementById('goods').value;
+ arr[1] = document.getElementById('paifanum').value; 
+ arr[2] = document.getElementById('unit').value;
+ arr[3] = document.getElementById('price').value;
+ arr[4] = arr[1]*arr[3];
+ arr[5] = document.getElementById('explain').value;
+ arr[6] ="<a style='text-align:center;color:blue;cursor:pointer;' onclick='updateRow(this);'>修改</a> <a style='text-align:center;color:blue;cursor:pointer;' onclick='delRow(this);'>删除</a>";
+ var x = document.getElementById('table').insertRow(1); //获取第一行对象
+  
+ for(var i=0;i<arr.length;i++){
+  x.insertCell(i).innerHTML = arr[i] ; //用循环把每个数据插入第一行的每一列
+ }
+ $('#savebutton').show();
+ pricetotal();
+  
+}
+//----新增信息的插入方法-----
+
+//----重新计算总价----- 
+function pricetotal(){
+    var set = [];
+    var i =0,all=0,length=$("#table").find("tr").length;;
+    var d = {};
+    var g = {"0":"goods","1":"paifanum","2":"unit","3":"price","4":"total","5":"explain"};
+
+    $('#table tr').each(function() {
+        var d = {};
+        var j=0 ;
+        if (i<length-1) {
+            $(this).find('td').each(function() { 
+                if (j==4) { price=Number($(this).text());all+=price;}
+                if (j<6) {  d[g[j]] = $(this).text();}
+                j++;
+            });
+        }
+        i++;
+        set.push(d);
+    });
+    $('#alltotal').text('￥'+all);
+    alltotal=all;
+    goods=set;
+}
+//----重新计算总价-----
+
+//----新增信息-----
+function addInfo(){
+ $('#savebutton').hide();
+  
+ if(judge()==true){
+  alert('添加成功');
+  insertInfo(); //执行插入
+  hideAddInput(); //隐藏添加信息框
+   
+ }else{
+  alert('添加失败');
+ }
+}
+//----新增信息-----
+ 
+ 
+//----根据行号修改信息-----
+function updateRow(r){
+ $('#savebutton').hide();
+
+ row = getRow(r); //把该行号赋值给全局变量
+ showAddInput(); //显示修改表单
+ //提交按钮替换
+ document.getElementById('btn_add').style="display:none" ;
+ document.getElementById('btn_update').style="display:block-inline" ;
+ insertInputFromQuery(queryInfoByRow(row));
+  
+}
+//----根据行号修改信息-----
+ 
+ 
+//----根据行号查信息----
+function queryInfoByRow(r){
+  
+ var arr = new Array();
+ for(var m=0 ; m<6;m++){
+  arr[m] = document.getElementById('table').rows[row].cells[m].innerText;
+ }
+ return arr ; //返回该行数据
+  
+}
+//----根据行号查信息----
+ 
+//----把查询到的信息放入修改的表单里----
+function insertInputFromQuery(arr){
+ document.getElementById('goods').value = arr[0];
+ document.getElementById('paifanum').value = arr[1];
+ document.getElementById('unit').value = arr[2];
+ document.getElementById('price').value = arr[3];
+ document.getElementById('explain').value = arr[5];
+  
+}
+//----把查询到的信息放入修改的表单里----
+ 
+ 
+function updateInfo(){
+ if(judge()==true){
+  alert('修改成功');
+  document.getElementById('table').deleteRow(row);//删除原来那行  
+  insertInfo(); //插入修改后的值
+  hideAddInput(); //隐藏添加模块
+ }else{
+  alert('修改失败');
+  hideAddInput();
+ }
+}
+</script>

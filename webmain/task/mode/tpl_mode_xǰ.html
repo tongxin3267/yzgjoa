@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['pagetitle']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<style type="text/css">
+	body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{ margin:0; padding:0;}
+	body{ background-color: #000;}
+	ul{ list-style-type: none;}
+	ul li{ float: left; overflow: hidden;}
+	.big-img{ /*position: absolute; */
+    position: fixed;
+    z-index: 8;top: 0; left: 0; width: 100%; height: 100%; display: none; background-color: #000;}
+</style>
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<!-- 
+<script type="text/javascript" src="js/jquery.js"></script> -->
+<script type="text/javascript" src="js/js.js"></script>
+<script type="text/javascript" src="<?=$da['p']?>/task/mode/modeview.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-changeuser.js"></script>
+<script>
+var mid = '<?=$da['arr']['mid']?>',modenum='<?=$da['arr']['modenum']?>',ismobile=1;
+js.changeuser=function(na,lx){
+	$('body').chnageuser({
+		'changetype':lx,
+		'titlebool':get('header_title'),
+		'idobj':get(na+'_id'),
+		'nameobj':get(na)
+	});
+}
+</script>
+<style>
+.stitle{padding:10px;border-bottom:1px #dddddd solid;font-size:16px;}
+.ydullist{display:inline-block;width:100%;}
+.ydullist li{float:left;width:16.6%;text-align:center;padding:5px 0px;font-size:12px;display:block;line-height:25px;padding-top:10px}
+.ydullist li:active{ background-color:#eeeeee}
+.ydullist li img,.faces{height:30px;width:30px;border-radius:15px}
+.ydullist li span{font-size:12px;color:#888888;}
+
+.pinglun td{padding:10px 0px}
+.pinglun .dt,.pinglun .act{font-size:12px;color:#888888;padding-top:5px}
+.pinglun .name{color:#555555}
+.pinglun tr{border-bottom: 1px solid #eeeeee;}
+.pinglun .sm{padding-top:8px;font-size:14px}
+.faces{margin-right:10px}
+.createtable{width:98%}
+.status{position: absolute;left:5px;top:5px;display:}
+td.tdys1{border:1px #e5e5e5 solid;text-align:center;padding:0px 5px}
+.divinput{padding:0px}
+.datesss{background:url(mode/icons/date.png) no-repeat right;cursor:pointer;}
+
+.check_status1{	color: #777;    font-size: 12px;    line-height: 20px;    background-color: #ECF0F1;    height: 20px;
+    padding: 1px 9px;    border-style: solid;    border-color: #BEC3C7;}
+.cksover{    color: #FFF;    background-color: #1BBC9D;    border-color: #16A086;}
+
+/*.showimage:hover{
+  transform: scale(2, 2);
+  transition: .3s transform;
+  margin-left: 20%;
+}*/
+#uploadwin_main{    width: 100% !important;    left: 0 !important;
+}
+.homelishow li {
+    float: left;
+    text-align: center;
+}
+.homelishow {
+    display: inline-block;
+}
+.homeiconss {
+    margin: 0px 0px;
+   
+    color: white;
+    width: 80px;
+    height: 60px;
+}
+.homeiconss2 {
+    width: 70px;
+    height: 55px;
+}
+.zhu {
+    color: #080707;
+}
+.homeiconss .div01 {
+   margin-top: 0px;
+}
+.homeiconss i {
+    font-size: 20px;
+}
+#daiban_text {
+    font-size: 12px;
+}
+.w100 {
+    width : 100% !important;
+}
+.w25 {
+    width : 25% !important;
+}
+.w50 {
+    width : 50% !important;
+}
+.w30 {
+    width : 40% !important;
+}
+.w20 {
+    width : 20% !important;
+}
+</style><!--标准mui.css-->
+		<link rel="stylesheet" href="web/res/mui/css/mui.min.css">
+		<!--App自定义的css-->
+		<style type="text/css">
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+		</style>
+
+</head>
+<body style="background-color:#fefefe">
+
+	<div class="big-img animated fadeInDown" id="bigImg">
+		<img id="lar-img"/>
+	</div>
+
+<?php
+if($isheader==1)echo '<div class="header" id="header_title"><span onclick="js.back()" class="header-back"></span>'.$da['title'].'</div><div style="height:46px;overflow:hidden" class="suibianxiede"></div>';
+?>
+<div class="padding10" style="position:relative">
+	<?php
+	if($da['arr']['isflow']==1)echo '<div class="status"><img src="images/status'.$da['arr']['flowinfor']['nowstatus'].'.png"></div>';
+	echo $da['arr']['contview']
+	?>
+</div>
+
+<div class="paddin8g10">
+	
+	<?php 
+	if($da['arr']['isflow']==1){
+		$flowinfor = $da['arr']['flowinfor'];
+			$flowcoursestr=(explode("→",$flowinfor['flowcoursestr']));
+	?>
+
+	<div>
+	
+		<div align="center">
+		<form name="myform">
+		<table border="0" width="100%" class="tabled1" style="border-collapse:collapse;" cellspacing="0" cellpadding="0">
+		<tr height="40" bgcolor="#E1F4F0">
+			<td class="tdys1"><div align="right" style="color:#555555">状态：</div></td>
+			<td class="tdys1"><div align="left"><?=$flowinfor['nstatustext']?></div></td>
+		</tr>
+		<tr height="40">
+			<td class="tdys1 w100"  colspan="2" ><div align="left" style="padding:5px 0px">
+			<ul class="homelishow w100">
+			<?php
+				foreach($flowcoursestr as $k=>$val){ 
+				    //happy_add 此处修改流程背景色background-color:#1389D3
+					?>
+				<li class=" w25"  width="25%"><div class="homeiconss w100">
+						<div style="background-color:#E1F4F0" class="homeiconss2">	
+							<div class="div01"><i class="icon-time"></i></div>	
+							<div id="daiban_text"><?php echo $i=preg_replace("/\(.*\)/", '', $val);?><div>	</div></div>
+						</div>
+					</div></li>
+			<?php 	
+			}?>
+			</ul></div></td>
+		</tr>
+		<?php if($flowinfor['ischeck']==1){?>
+		<tr height="40">
+			<td class="tdys1"><div align="right" style="color:#555555"><font color=red>*</font>处理人：</div></td>
+			<td class="tdys1"><div align="left"><?=$flowinfor['nowcourse']['name']?>(<?=$flowinfor['nowcourse']['nowcheckname']?>)</div></td>
+		</tr>
+			<tr height="40">
+				<td class="tdys1"><div align="right" style="color:#555555">流程提示：</div></td>
+				<td class="tdys1"><div align="left" style="padding:5px 0px;color:red"><?=$flowinfor['nowcourse']['explain']?></div></td>
+			</tr>
+		
+		<tr height="40">
+			<td class="tdys1" nowrap><div align="right" style="color:#555555"><font color=red>*</font>处理动作：</div></td>
+			<td class="tdys1"><div align="left" class="cks " style="display: flex;">
+			<?php
+			$s = '';
+			foreach($flowinfor['courseact'] as $k=>$act){
+				if($k>0)$s.='<div class="w30" ><label class="check_status1" ><input name="check_status" hidden class="w20" type="radio" value="'.$k.'">'.$act[0].'</label></div>';
+			}
+			echo $s;
+			?>
+			</div></td>
+		</tr>
+		
+		<?php
+		foreach($flowinfor['checkfields'] as $chef=>$chefv){
+		if($chefv['showinpus']==1){
+		?>
+		<tr>
+			<td class="tdys1"><div align="right" style="color:#555555"><font color=red>*</font><span fieidscheck="<?=$chef?>"><?=$chefv['name']?></span>：</div></td>
+			<td class="tdys1" style="padding:5px;" ><div align="left"><?=$chefv['inputstr']?></div></td>
+		</tr>
+		<?php
+		}else if($chefv['showinpus']==2){
+			echo '<tr style="display:none"><td><span fieidscheck="'.$chef.'">'.$chefv['name'].'</span></td></tr>';
+		}}
+		?>
+		
+		<tr  style="display:none">
+			<td class="tdys1"><div  align="right" style="color:#555555">转给：</div></td>
+			<td class="tdys1" style="padding:5px"><div align="left">
+			<table width="98%" cellpadding="0" border="0"><tr><td width="100%"><input placeholder="" class="inputs" style="width:98%" id="zhuanbanname" readonly type="text" name="zhuanbanname"><input name="zhuanbannameid" id="zhuanbanname_id" type="hidden"></td><td nowrap><a href="javascript:;" style="border-right:1px #0AA888 solid" onclick="js.changeclear('zhuanbanname')" class="webbtn">×</a><a href="javascript:;" onclick="js.changeuser('zhuanbanname','changeuser')" class="webbtn">选择</a></td></tr></table>
+			</div></td>
+		</tr>
+		
+		<?php if($flowinfor['ischange']==1){?>
+		<tr>
+			<td class="tdys1"><div  align="right" style="color:#555555"><font color=red>*</font>下一步处理人：</div></td>
+			<td class="tdys1" style="padding:5px"><div align="left">
+			<table width="98%" cellpadding="0" border="0"><tr><td width="100%"><input placeholder="选择下一步[<?=$flowinfor['nextcourse']['name']?>]处理人" class="inputs" style="width:98%" id="nextname" readonly type="text" name="nextname"><input name="nextnameid" id="nextname_id" type="hidden"></td><td nowrap><a href="javascript:;" style="border-right:1px #0AA888 solid" onclick="js.changeclear('nextname')" class="webbtn">×</a><a href="javascript:;" onclick="js.changeuser('nextname','changeusercheck')" class="webbtn">选择</a></td></tr></table>
+			</div></td>
+		</tr>
+		<?php }?>
+		
+		<tr>
+			<td class="tdys1"><div  align="right" style="color:#555555">说明：</div></td>
+			<td class="tdys1" style="padding:5px"><div align="left"><textarea class="inputb" name="check_explain" style="width:95%;height:60px;"></textarea></div></td>
+		</tr>
+		
+				<tr><td class="tdys1">相关文件</td>
+				<td colspan="3" class="ys2">
+				<input name="check_fileid" type="hidden" id="fileidview-inputEl" value="">
+				<div id="view_fileidview" style="width:97%;height:80px;border:1px #cccccc solid; background:white;overflow:auto"></div>
+				<div id="fileupaddbtn"><a href="javascript:;" class="blue" onclick="c.upload()"><u>＋添加文件</u></a></div>
+				</td></tr> 
+		<tr>
+			<td class="tdys1">&nbsp;</td>
+			<td class="tdys1" style="padding:5px"><div align="right"><input class="webbtn" onclick="check(this)"  value="提交处理" type="button">&nbsp;<span id="msgview"></span></div></td>
+		</tr>
+		
+		<?php }?>
+		</table>
+		</form>
+		</div>
+		<div class="blank10"></div>
+	</div>
+	
+
+
+
+
+	<?php
+	}
+	$logarr = $da['arr']['logarr'];
+	if($logarr){
+	?>
+	<div onclick="c.changeshow(0)" class="stitle zhu">处理记录(<?=count($logarr)?>) <img align="absmiddle" height="16" width="16" src="images/xiangyou1.png"> </div>
+	<div id="showrecord0" class="pinglun" style="display:none">
+	<table width="100%">
+	<?php 
+	foreach($logarr as $k=>$rs){
+		$s = '<tr valign="top">';
+		$s.= '<td align="center" width="45"><img src="'.$rs['face'].'" class="faces"></td>';
+		$s.= '<td>';
+		$s.= '<div class="name">'.$rs['name'].'<span class="act">['.$rs['actname'].']</span><font color="'.$rs['color'].'">'.$rs['statusname'].'</font></div>';
+		$s.= '<div class="dt">'.$rs['optdt'].'</div>';
+		$s.= '<div class="sm">'.$rs['explain'].'</div>';
+
+		if(!empty($rs['fileid'])){
+			$hello = explode(',',$rs['fileid']); 
+			$s.='<ul class="img-lt">';
+			for($index=0;$index<count($hello);$index++) 
+			{ //happy_add	
+							$i=m('file')->showimage($hello[$index]);
+							$s.='<li class="animated bounceIn '.$hello[$index].'" id="'.$hello[$index].'" data-id="'.$i.'" style="width:88px; height:88px; padding-left:0px; padding-top:2px;">';
+							$s.= '<img src="'.$i.'" width="88px"  height="88px" class="showimage"  data-preview-src="" data-preview-group="1" >';
+				//$s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>下载文件</u></a><br>';
+				//$s.= '</li>';
+						$i='';
+			}
+			$s.='</ul>';
+		}
+
+		$s.= '</td>';
+		$s.= '</tr>';
+		echo $s;
+	}
+	?>
+	</table>
+	</div>
+	<div class="blank10"></div>
+	<?php }?>
+	<div onclick="location.reload()"  class="stitle zhu aui-border-b">查阅记录</div>
+	<div><ul class="ydullist"><?php
+		foreach($da['arr']['readarr'] as $k=>$rs){
+			echo '<li onclick="showchayue(\''.$rs['optdt'].'\',\''.$rs['stotal'].'\')"><img src="'.$rs['face'].'" align="absmiddle"><br><span>'.$rs['name'].'</span></li>';
+		}
+	?></ul></div>
+	<?php 
+		if($da['spagepath']!=''){
+			include_once($da['spagepath']);
+		}
+	?>	
+</div>
+<link rel="stylesheet" type="text/css" href="mode/plugin/css/jquery-rockdatepicker.css"/>
+<script type="text/javascript" src="mode/plugin/jquery-rockdatepicker.js"></script>
+<script type="text/javascript" src="webmain/flow/input/inputjs/mode_work.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-imgview.js"></script>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+	<script src="web/res/mui/js/mui.min.js"></script>
+	<script src="web/res/mui/js/mui.zoom.js"></script>
+	<script src="web/res/mui/js/mui.previewimage.js"></script>
+	<script>
+		mui.previewImage();
+	</script>
+<script type="text/javascript" >
+	$("input[name=check_status]").click(function(){	
+		//var i=$("input[name=check_status]:checked").parent();
+		$(".cks div").children().removeClass('cksover');
+		$("input[name=check_status]:checked").parent().addClass('cksover');
+	 });
+</script>
+</body>
+</html>

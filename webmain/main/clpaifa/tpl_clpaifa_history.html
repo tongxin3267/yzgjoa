@@ -1,0 +1,254 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/log.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?4"></script>
+
+<!--标准mui.css-->
+<link rel="stylesheet" href="web/res/mui/css/mui.min.css">
+<!--App自定义的css--><!-- 
+<link rel="stylesheet" href="web/res/mui/css/muipreviewimage.css"> -->
+       
+
+<div align="center">
+
+    <div class="big-img animated fadeInDown" id="bigImg">
+        <img id="lar-img"/>
+    </div>
+<!-- <div  style="padding:10px;width:700px"> -->
+<table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%">
+    <tbody>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">业主姓名</td>
+            <td class="ys2" colspan="3" style="text-align:left;"><?=$gongdiinfo['chuban']?></td>
+        </tr>
+        <tr>
+            <td class="ys1" height="34" align="left" style="text-align:center;">项目名称</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$gongdiinfo['title']?></td>
+        </tr>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">装修地址</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$gongdiinfo['weizhi']?></td>
+        </tr>
+        <tr>
+            <td align="left" class="ys1" width="22%" style="text-align:center;">工程监理</td>
+            <td class="ys2" width="30%" style="text-align:left;"><?=$gongdiinfo['author']?></td>
+            <td height="34" align="left" class="ys1" style="text-align:center;">联系方式</td>
+            <td class="ys2" style="text-align:left;"><?=$mobile?></td>
+        </tr>
+    </tbody>
+</table>
+
+        <div style="font-size: 12px;padding: 0 15px;"><span>提交时间：<?=$gongdiinfo['createdt']?>  完成时间：<?=$gongdiinfo['dealdt']?></span> </div>
+        <div style="overflow:hidden; height:20px"></div>
+
+        <table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" style="text-align: center;font-size: 10px">
+
+            <thead>
+                <th height="34">材料名称</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>合计</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+             <?php 
+                if(!empty($gongdiinfo['goods'])){
+                    $goodslist=json_decode($gongdiinfo['goods']);
+                        foreach($goodslist as $kk=>$rrs){
+                            $ll=json_decode(json_encode($rrs),TRUE);
+                            if(isset($ll['goods'])&&$ll['goods']!='d'){ ?> 
+                                <tr height="34">
+                                    <td class="f10fL"><?=$ll['goods']?></td>
+                                    <td class="f10fL"><?=$ll['paifanum']?><?=$ll['unit']?></td>
+                                    <td class="f10fR">￥<?=$ll['price']?></td>
+                                    <td class="f10fR">￥<?=$ll['total']?></td>
+                                    <td style=" max-width: 81px;"><?=$ll['explain']?></td>
+                                </tr>
+                            <?php } ?> 
+
+                <?php } ?> 
+                <tr>
+                    <td><?=$gongdiinfo['clgysname']?></td>
+                    <td height="34" align="left" class="ys1" style="text-align:center;">合计</td>
+                    <td class="ys2">￥<?=$gongdiinfo['alltotal']?></td>
+                    <td align="left" class="ys1" style="text-align:center;">商定总价</td>
+                    <td >￥<?=$gongdiinfo['totalprice']?></td>
+                </tr>
+            <?php } ?> 
+            <?php 
+            if(!empty($gongdiinfo['explain'])){ ?>
+                <tr>
+                    <td style=" min-width: 11px;" height="34">材料商备注
+                    </td>
+                    <td colspan="4"><?=$gongdiinfo['explain']?>
+                    </td>
+                </tr> 
+            <?php }     ?>
+                <tr>
+
+                    <td >相关文件
+                    </td>
+                    <td colspan="4">
+                    <?php 
+                    if(!empty($gongdiinfo['xgwj'])){
+                        $hello = explode(',',$gongdiinfo['xgwj']);
+                        for($index=0;$index<count($hello);$index++) 
+                        { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            }else{
+                                $i2=$i;
+                            }
+                        ?>
+                            <a href="javascript:" onclick="return js.downshow(<?=$hello[$index]?>)" style="color:blue"><u>下载该文件</u></a>
+                            <img src="<?=$i2?>" width="50px" class="showimage"><br> 
+                        <?php 
+                        $i='';
+                        } }
+
+                    ?>
+                    </td>
+                </tr>
+            </tbody>
+        </table> 
+    </div>
+    <div class="fR" >
+     <?php 
+        switch ($gongdiinfo['status']) {
+        //0配送申请提交，1材料商已配送，2退货申请提交，3材料商已退货
+            case '0':
+                if($adminid==$gongdiinfo['clgysid']){
+                    echo '<button type="button" class="webbtn" onclick="c.paifa('.$gongdiinfo['id'].','.$gongdiinfo['type'].');">配送处理</button>';
+                }
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >配送申请提交</button>'; 
+                break;
+            case '1':
+                 if($gongdiinfo['progress']==6) echo '<div style="padding: 8px 10px;    color: #1ABC9C;">已取消</div>'; 
+                else echo '<div style="padding: 8px 10px;color: #1ABC9C;" >材料商已配送</button>'; 
+                break;
+            case '2':
+                if($adminid==$gongdiinfo['clgysid']){
+                    echo '<button type="button" class="webbtn" onclick="c.paifa('.$gongdiinfo['id'].','.$gongdiinfo['type'].');">退货处理</button>';
+                }
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >退货申请提交</button>'; 
+                break;
+            case '3':
+                 if($gongdiinfo['progress']==6) echo '<div style="padding: 8px 10px;    color: #1ABC9C;">已取消</div>'; 
+                else echo '<div style="padding: 8px 10px;    color: #1ABC9C;" >材料商已退货</button>'; 
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+     ?> 
+    </div>
+</div>
+        <div class="blank10"></div>
+
+    <?php    
+    if($logarr){
+    ?>
+    <div onclick="c.changeshow(0)" class="stitle zhu">工作日志(<?=count($logarr)?>) <img align="absmiddle" height="16" width="16" src="images/xiangyou1.png"> </div>
+    <div id="showrecord0" class="pinglun" style="display:none">
+    <table width="100%">
+    <?php 
+    foreach($logarr as $k=>$rs){
+        $explain=nl2br($rs['explain']); 
+        $s = '<tr valign="top">';
+        $s.= '<td align="center" width="45"><img src="'.$rs['face'].'" class="faces"></td>';
+        $s.= '<td>';
+        $s.= '<div class="name">'.$rs['name'].'<span class="act">['.$rs['actname'].']</span><font color="'.$rs['color'].'">'.$rs['statusname'].'</font></div>';
+        $s.= '<div class="dt">'.$rs['optdt'].'</div>';
+        $s.= '<div class="sm">'.$explain.'</div>';
+        $filed ='';
+        if(!empty($rs['fileid'])){
+            $hello = explode(',',$rs['fileid']); 
+            $s.='<ul class="img-lt">';
+            for($index=0;$index<count($hello);$index++) 
+            { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $s.='<li class="animated bounceIn '.$hello[$index].'" id="'.$hello[$index].'" data-id="'.$i.'" style="width:88px; height:88px; padding-left:0px; padding-top:2px;">';
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'||$nnn[1]=='jpeg'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            $s.= '<img src="'.$i2.'" width="88px"  height="88px" class="showimage"  data-preview-src="'.$i.'" data-preview-group="1" >';
+                            }else if($nnn[1]=='pdf'){
+                                $i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }else{
+                                //$i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $i2="'http://oa.yuazen.cn/".$nnn[0].".html'";
+                                //$i2="'http://localhost:89/".$nnn[0].".html'";
+
+                                //$s.= '<a href="javascript:" onclick="window.location.href='.$i2.'" style="color:blue"><u>预览文件</u></a><br>';
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }
+                //$s.= '</li>';
+                        $i='';
+                        $i2='';
+                        $nnn='';
+            }
+            $s.='</ul>';
+        }
+
+        $s.= '</td>';
+        $s.= '</tr>';
+        echo $s;
+    }
+    ?>
+    </table>
+    </div>
+    <div class="blank10"></div>
+    <?php }?>
+<script type="text/javascript">
+    
+var c={
+    paifa:function(id,type){
+
+        $.get(js.getajaxurl('editsave','clpaifa','main',{id:id,type:type}), function(da){
+            alert(da);
+            c.refresh();
+            parent.js.tanclose('clupdatewin');            
+        });
+        return false;
+    var url = 'index.php?m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    tuihuo:function(cid,fid){
+    var url = 'index.php?a=tuihuo&m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+       // js.winiframe('材料配送', url);
+        return false;
+    },
+    refresh:function(){
+        js.msg('wait', '更新中...');
+        $.get(js.getajaxurl('updatedata','clpaifa','main'), function(da){
+            js.msg('success', da);
+        });
+    },
+    changeshow:function(lx){
+        $('#showrecord'+lx+'').toggle();
+    },
+};
+</script>

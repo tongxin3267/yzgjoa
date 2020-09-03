@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['pagetitle']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<?php if($stype==''){?>
+<link rel="stylesheet" type="text/css" href="<?=$da['p']?>/css/css.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css?3">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/clpaifa.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/js.js?17"></script>
+<script type="text/javascript" src="<?=$da['p']?>/task/mode/modeview.js?14"></script>
+<script>
+var mid = '<?=$da['arr']['mid']?>',modenum='<?=$da['arr']['modenum']?>',ismobile=0;
+</script>
+<link rel="stylesheet" href="web/res/mui/css/mui.min.css?3">
+<?php }?>
+<style>
+.ydullist li{width:10%;}
+<?php
+if($stype!=''){
+?>
+*{font-size:14px}
+.tabled2 td{border-color:#000000}
+<?php }?>
+.ys0{border:1px #888888 solid}
+.ys1{padding:5px 5px; border:1px #888888 solid;color:#555555;}
+.ys2{padding:5px 5px; border:1px #888888 solid;}
+.classhide{display: none;}
+.menulistshow_s,.r-border-t{
+    background: white;
+    padding: 5px;}
+#menulistshow_s{
+	margin-left: 30% !important
+}
+.hhhh{    word-break: break-all;}
+</style>
+</head>
+<body style="background:white">
+<div align="center">
+<div style="width:700px;position:relative" align="left">
+	<?php if($stype==''){?>
+	<div class="menulls"><a href="javascript:;" id="showmenu" style="background-color:#888888;font-size:12px" class="webbtn">操作V</a></div>
+	<div class="menullss"><ul><li lx="0">打印...</li>
+	<li lx="5">另存为word...</li>
+	<?php
+	if($da['arr']['isedit']==1)echo '<li lx="1">编辑</li>';
+	if($da['arr']['isdel']==1)echo '<li lx="2">删除...</li>';
+	?>
+	<li lx="3">关闭</li>
+	<li lx="4">刷新</li>
+		</ul>
+	</div>
+	<?php }?>
+	
+	<?php
+	if($da['arr']['isflow']==1 && $stype=='')echo '<div class="status"><img src="images/status'.$da['arr']['flowinfor']['nowstatus'].'.png"></div>';
+
+
+	if(!isempt($da['title'])){
+		echo '<div class="ptitle">'.$da['title'].'</div>';
+	}
+	?>
+	
+	
+	<div class="padding10 pcont" align="left">
+	<?php 
+		$contview = $da['arr']['contview'];
+		if($stype!='')$contview=str_replace('cccccc','000000', $contview);
+		echo $contview;
+	?></div>
+
+
+	<?php 
+	if($da['arr']['changeurlstr']){	
+	$changeurlstr=$da['arr']['changeurlstr'];
+	?>	
+	<div  style="margin-left: 80%;"><a href="javascript:" onclick="window.location.href='<?=$changeurlstr?>'"  style="color: #007aff"><?=$da['arr']['description']?></a></div>
+	<?php }
+	?>
+<?php 
+		
+		if($da['arr']['isflow']==1 && $stype==''){
+			$flowinfor = $da['arr']['flowinfor'];
+			$flowcoursestr=(explode("→",$flowinfor['flowcoursestr']));
+
+			//新增icon
+			$s='';
+			$da['arr']['modenum']=='rzgongdi'?$s='s':'';
+			$da['arr']['modenum']=='rgfee'?$s='r':'';
+			$da['arr']['modenum']=='yzjuzhuang'?$s='y':'';
+			$da['arr']['modenum']=='jzrgfee'?$s='yr':'';
+			//新增icon end
+
+			//新增人工费清单制作 20180329  人工费材料变更制作 20180331
+			$flowid=getconfig('rgfeeflowid');
+			$clflowid=getconfig('rgfeeclflowid');
+			$isin=in_array($flowinfor['nowcourse']['id'],$flowid);
+			$isincl=in_array($flowinfor['nowcourse']['id'],$clflowid);
+		?>
+		
+<!-- 基础材料 begin  -->
+<div  style="background-color: #efefef;">
+<div class="card base-metails" style="background-color: #efefef;">
+	<div style="height: 20px"></div>
+    <div class="card-title title-detail" onclick="toggleshow(1)" style="text-align: center;">
+         <span ><?=$flowinfor['nstatustext']?></span><img align="absmiddle" height="16" width="16" style="float: right;margin-top: 10px; "  src="images/xiangyou1.png">
+    </div>
+
+    <div class="card-body"  id="showcourse1">
+        <ul class="status-ul">
+        		<?php if($flowinfor['beforecourse']){ ?>
+                <li class=" stepdone " style="display: flex;">
+                    <div class="div01  linediv">
+                        <img src="images/2.png" class="icon-position img-position">
+                          <div class="line"></div>
+                        </div>    
+                    <div class=" P10 w100">  
+                         <div class="status-div">  <span class="step_text"><?=$flowinfor['beforecourse']['name']?></span> <span class="time_text"><?=$flowinfor['beforecourse']['optdt']?></span> </div>
+                    </div>
+                 </li>
+				<?php }	 ?>
+        		<?php if($flowinfor['nowcourse']){ ?>
+                <li class=" fs15  " style="display: flex;">
+                    <div class="div01 nowcourse linediv ">
+                        <i class=" icon-spinner icon-spin icon-position"></i>
+                           <div class="line"></div>
+                        </div>    
+                    <div class=" P10 w100 pT5">  
+                         <div class="status-div">  <span class="step_text"><?=$flowinfor['nowcourse']['name']?></span> <span class="time_text "><?=$flowinfor['nowcourse']['nowcheckname']?></span> </div>
+                    </div>
+                 </li>
+				<?php }	 ?>
+        		<?php if($flowinfor['nextcourse']){ ?>
+                <li class="  " style="display: flex;">
+                    <div class="div01  linediv">
+                        <i class=" iconfont icon-yuan icon-position"></i>
+                          <div class="line"></div>
+                        </div>    
+                    <div class=" P10 w100">  
+                         <div class="status-div">  <span class="step_text"><?=$flowinfor['nextcourse']['name']?></span> <span class="time_text"></span> </div>
+                    </div>
+                 </li>
+				<?php }	 ?>
+            </ul>
+      </div>  
+	<div id="showrecord1" class="pinglun" style="display:none">
+		<div class="card-body" >
+	        <ul class="status-ul">
+	        <?php
+				//var_dump($flowinfor);die;
+
+			foreach($flowcoursestr as $k=>$val){ 
+			?>
+				<li class="   " style="display: flex;">
+	                <?php 
+						echo $i=preg_replace("/\（.*\）/", '', $val);
+					?>
+	            </li>				
+			<?php 	
+				}
+			?>
+	        </ul>
+  		</div>    
+  </div>    
+</div>
+</div>
+<!-- 基础材料 end  -->
+
+<!-- 其他服务 begin  -->
+
+<?php
+$flowcoursebutton_str=(explode("→",$flowinfor['flowcoursebutton_str']));
+if($flowcoursebutton_str[0]){	?>
+<div class="bg-white">
+	<div class="icon-title">下单</div>
+	<div class="mui-row mui-text-center icon-button">
+		<?php
+		//var_dump($flowcoursebutton_str);die;
+		foreach($flowcoursebutton_str as $k=>$val){ 
+		if(strlen($val)>27){
+		?>
+	    <div class="mui-col-xs-3">
+	    	<div class=""><img src="images/other/<?php echo $k;?>.png" style="width: 40px;"></div>
+			<!-- <div class=""><i class="iconfont icon-<?php echo $k;?> fs32 icon-img"></i></div>	 -->
+	        <div class="text"><?php echo $i=preg_replace("/\（.*\）/", '', $val);?></div>
+	    </div>				
+		<?php }	
+		} ?>
+	</div>
+</div>			
+<?php 
+}
+?>
+<!-- 其他服务 end  -->
+		<div>
+			<?php if($flowinfor['ischeck']==1){?>
+			<div align="center" style="padding-bottom:5px"><b>审核处理</b></div>
+			<div align="center">
+			<form name="myform">
+			<table border="0" width="90%" class="tabled1" style="border-collapse:collapse;" cellspacing="0" cellpadding="0">
+						</tr>
+			<tr height="40">
+				<td class="tdys1"><div align="right" style="color:#555555"><font color=red>*</font>处理人：</div></td>
+				<td class="tdys1"><div align="left"><?=$flowinfor['nowcourse']['name']?>(<?=$flowinfor['nowcourse']['nowcheckname']?>)</div></td>
+			</tr>
+			
+			<tr height="40">
+				<td class="tdys1"><div align="right" style="color:#555555">工作任务：</div></td>
+				<td class="tdys1">
+				<div align="left" style="padding:10px 0px;color:#0374c2">
+				<?php echo $oi=nl2br($flowinfor['nowcourse']['explain']);?></div>
+				<label style="color:#888888;font-size: 10px;line-height: 20px;display: block;width: 100px;margin: 0 auto;"><input name="taskdesc" value="123" type="checkbox" style="margin-top:4px;float: left;">我已阅读并完成</label><!-- 
+				<label style="color:#888888 ;font-size: 10px;line-height: 20px;"><input name="taskdesc" value="123"   type="checkbox">我已阅读并完成</label> -->
+				</td>
+			</tr>
+			<tr height="40">
+				<td class="tdys1"><div align="right" style="color:#555555"><font color=red>*</font>处理动作：</div></td>
+				<td class="tdys1"><div align="left" class="cks">
+				<?php
+				$s = '';
+				foreach($flowinfor['courseact'] as $k=>$act){
+					if($k>0)$s.='<label class="check_status1" ><input name="check_status" hidden type="radio" value="'.$k.'" >'.$act[0].'</label> &nbsp; ';
+				}
+				echo $s;
+				?>
+				</div></td>
+			</tr>
+			
+			<?php
+			foreach($flowinfor['checkfields'] as $chef=>$chefv){
+			if($chefv['showinpus']==1){
+			?>
+			<tr height="40">
+				<td class="tdys1"><div align="right" style="color:#555555"><font color=red>*</font><span fieidscheck="<?=$chef?>"><?=$chefv['name']?></span>：</div></td>
+				<td class="tdys1"><div align="left"><?=$chefv['inputstr']?></div></td>
+			</tr>
+			<?php
+			}else if($chefv['showinpus']==2){
+				echo '<tr style="display:none"><td><span fieidscheck="'.$chef.'">'.$chefv['name'].'</span></td></tr>';
+			}}
+			?>
+			
+			<tr style="display:none">
+				<td class="tdys1"><div  align="right" style="color:#555555">转给：</div></td>
+				<td class="tdys1" style="padding:5px"><div align="left">
+				<table width="98%" cellpadding="0" border="0"><tr><td width="100%"><input placeholder="" class="inputs" style="width:98%" id="zhuanbanname" readonly type="text" name="zhuanbanname"><input name="zhuanbannameid" id="zhuanbanname_id" type="hidden"></td><td nowrap><a href="javascript:;" style="border-right:1px #0AA888 solid" onclick="js.changeclear('zhuanbanname')" class="webbtn">×</a><a href="javascript:;" onclick="js.changeuser('zhuanbanname','changeuser')" class="webbtn">选择</a></td></tr></table>
+				</div></td>
+			</tr>
+			
+			<?php if($flowinfor['ischange']==1){?>
+			<tr>
+				<td class="tdys1"><div  align="right" style="color:#555555"><font color=red>*</font>下一步处理人：</div></td>
+				<td class="tdys1" style="padding:5px"><div align="left">
+				<table width="98%" cellpadding="0" border="0"><tr><td width="100%"><input placeholder="选择下一步[<?=$flowinfor['nextcourse']['name']?>]处理人" class="inputs" style="width:98%" id="nextname" readonly type="text" name="nextname"><input name="nextnameid" id="nextname_id" type="hidden"></td><td nowrap><a href="javascript:;" style="border-right:1px #0AA888 solid" onclick="js.changeclear('nextname')" class="webbtn">×</a><a href="javascript:;" onclick="js.changeuser('nextname','changeusercheck')" class="webbtn">选择</a></td></tr></table>
+				</div></td>
+			</tr>
+			<?php }?>
+			
+			<?php if($isin){?>
+				<tr><td class="tdys1">清单制作</td>
+				<td colspan="3" class="ys2">
+				<input name="check_rgfeelist" type="hidden" id="rgfeelist" value="">
+				<input name="check_totalprice" type="hidden" id="totalprice" value="">
+				<input name="check_alltotal" type="hidden" id="alltotal" value="">
+				<input name="check_rgfeeview" type="hidden" id="rgfeeview-inputEl" value="">
+				<div id="view_rgfeeview" style="width:97%;height:80px;border:1px #cccccc solid; background:white;overflow:auto"></div>
+				<div id="rgfeeaddbtn"><a href="javascript:;" class="blue" onclick="c.rgfeezizuo()"><u>＋清单制作</u></a></div>
+				</td></tr> 
+			<?php }?>
+			
+			<?php if($isincl){?>
+				<tr><td class="tdys1">测量通知</td>
+				<td colspan="3" class="ys2"><!-- 
+				<input name="check_clupdatelist" type="hidden" id="clupdatelist" value="">
+				<input name="check_totalprice" type="hidden" id="totalprice" value="">
+				<input name="check_alltotal" type="hidden" id="alltotal" value="">
+				<div id="view_clupdateview" style="width:97%;height:80px;border:1px #cccccc solid; background:white;overflow:auto"></div>
+				<div id="clupdateaddbtn"><a href="javascript:;"  class="blue" onclick="c.clupdate()"><u>＋主材升级</u></a></div> -->
+				<a href="javascript:;"  class=" check_status1" style="    padding: 9px 9px;line-height: 50px" onclick="js.paifa(<?php echo $flowinfor['nowcourse']['id'];?>,<?php echo $da['arr']['billrsid'];?>,'buildin');"><u>＋测量通知</u></a></div> 
+				</td></tr> 
+			<?php }?>
+			<tr>
+				<td class="tdys1"><div  align="right" style="color:#555555">任务说明：</div></td>
+				<td class="tdys1" style="padding:5px"><div align="left"><textarea class="textarea" name="check_explain" style="width:95%;height:60px"  placeholder="不能少于30字哦，升职加薪就靠它了"></textarea></div></td>
+			</tr>
+				<tr><td class="tdys1">相关文件</td>
+				<td colspan="3" class="ys2">
+				<input name="check_fileid" type="hidden" id="fileidview-inputEl" value="">
+				<div id="view_fileidview" style="width:97%;height:80px;border:1px #cccccc solid; background:white;overflow:auto"></div>
+				<div id="fileupaddbtn"><a href="javascript:;" class="blue" onclick="c.upload()"><u>＋添加文件</u></a></div>
+				</td></tr> 
+			<tr>
+				<td class="tdys1">&nbsp;</td>
+				<td class="tdys1" style="padding:5px"><div align="left"><input class="webbtn" onclick="check(this)"  value="提交任务" type="button">&nbsp;<span id="msgview"></span>&nbsp; &nbsp; <label style="color:#888888"><input id="autocheckbox" checked type="checkbox">处理完自动关闭</label></div></td>
+			</tr>
+			
+			</table>
+			</form>
+			</div>
+			<div class="blank10"></div>
+		</div>
+			<?php }?>
+		<?php }
+		
+		if($stype==''){
+		?>
+		
+		
+	<div class="padding10">
+		<?php 
+		if($da['spagepath']!='' && $stype==''){
+			include_once($da['spagepath']);
+		}
+		$logarr = $da['arr']['logarr'];
+		if($logarr){
+		?>
+		<div id="recordss">
+		<div class="stitle zhu" onclick="c.changeshow(0)" style="cursor:pointer">工作日志(<?=count($logarr)?>) 
+		<?php if($stype==''){?>
+		<img align="absmiddle" height="16" width="16" src="images/xiangyou1.png"> <a temp="clo" href="javascript:;" onclick="$('#recordss').remove();">×</a>
+		<?php }?>
+		</div>
+		<div id="showrecord0" style="display:no1e">
+			<table border="0"  class="tabled2" style="border-collapse:collapse;" width="100%" cellspacing="0" cellpadding="0">
+				<tr bgcolor="#E1F4F0">
+					<td style="min-width: 40px;">序号</td>
+					<td style="min-width: 80px;">动作</td>
+					<td style="min-width: 60px;">处理人</td>
+					<td style="min-width: 40px;">状态</td>
+					<td style="min-width: 40px;"> 说明</td>
+					<td style="min-width: 80px;">相关文件</td>
+					<td style="min-width: 120px;">时间</td>
+				</tr>
+				<?php 
+				foreach($logarr as $k=>$rs){
+					$explain=nl2br($rs['explain']);	
+				?>
+				<tr >
+					<td><?=$k+1?></td>
+					<td><?=$rs['actname']?></td>
+					<td><?=$rs['name']?></td>
+					<td style="color:<?=$rs['color']?>"><?=$rs['statusname']?></td>
+					<td><div  align="left" style="word-wrap: break-word;max-width: 500px;"><?=$rs['explain']?></div><br>
+						<?php 
+							$s='';
+							$filed ='';					
+
+								if(!empty($rs['rgfeelist'])){
+									$rgfeelist=json_decode($rs['rgfeelist']);
+									$filed ="'rgfeelist'";
+
+						        		$s.='<div class="mdiv" upload="true">';
+						                //$s.='<div class="div04">序号</div>';
+						                $s.='<div class="div04">项目</div>';
+						                $s.='<div class="div04">预算量</div>';
+						                $s.='<div class="div04">实际量</div>';
+						                $s.='<div class="div04">变更量</div>';
+						                $s.='<div class="div04">单位</div>';
+						                $s.='<div class="div04">单价</div>';
+						                $s.='<div class="div04">小计</div>';
+						                $s.='<div class="div04">备注</div>';
+										$s.='</div>';
+									foreach($rgfeelist as $kk=>$rrs){
+										if($rrs!="del"){
+											$ll=json_decode(json_encode($rrs),TRUE);
+											if(isset($ll['goods'])){
+												//var_dump($ll);
+								        		$s.='<div class="mdiv" upload="true">';
+								                //$s.='<div class="div04">'.$kk.'</div>';
+								                $s.='<div class="div04">'.$ll['goods'].'</div>';
+								                $s.='<div class="div04">'.$ll['yusuan'].'</div>';
+								                $s.='<div class="div04">'.$ll['shiji'].'</div>';
+								                $s.='<div class="div04">'.$ll['cha'].'</div>';
+								                $s.='<div class="div04">'.$ll['unit'].'</div>';
+								                $s.='<div class="div04">'.$ll['price'].'</div>';
+								                $s.='<div class="div04">'.$ll['total'].'</div>';
+								                $s.='<div class="div04">'.$ll['explain'].'</div>';
+												$s.='</div>';
+											}
+										}
+
+										//$s.='<div style="padding:4px 5px;border-bottom:1px #eeeeee solid"><span>'.$kk.'</span>.'.$ll['goods'].' 预算:'.$ll['yusuan'].$ll['unit'].' 实际:'.$ll['shiji'].$ll['unit'].' 变更:'.$ll['cha'].' 价格:'.$ll['price'].' 小计:'.$ll['total'].'</div>';
+									}
+
+									$s.='<div style="padding:4px 15px;border-bottom:1px #eeeeee solid;color:green"> 合计:'.$rs['alltotal'].' 商定人工费总价:'.$rs['totalprice'].'</div>';
+									$s.= '<a href="javascript:" onclick="return js.createtable('.$rs['id'].','.$filed.')" style="color:blue"><u>导出文件</u></a><br>';
+								}
+								if(!empty($rs['clupdatelist'])){
+									$clupdatelist=json_decode($rs['clupdatelist']);
+									$filed ="'clupdatelist'";
+
+						        		$s.='<div class="mdiv" upload="true">';
+						                //$s.='<div class="div04">序号</div>';
+						                $s.='<div class="div04">主材名称</div>';
+						                $s.='<div class="div04">预算单价</div>';
+						                $s.='<div class="div04">选样单价</div>';
+						                $s.='<div class="div04">预算数量</div>';
+						                $s.='<div class="div04">实际数量</div>';
+						                $s.='<div class="div04">变更金额</div>';
+						                $s.='<div class="div04">小计</div>';
+						                $s.='<div class="div04">备注</div>';
+										$s.='</div>';
+									foreach($clupdatelist as $kk=>$rrs){
+										if($rrs!="del"){
+											$ll=json_decode(json_encode($rrs),TRUE);
+											if(isset($ll['goods'])){
+												//var_dump($ll);
+								        		$s.='<div class="mdiv" upload="true">';
+								                //$s.='<div class="div04">'.$kk.'</div>';
+								                $s.='<div class="div04">'.$ll['goods'].'</div>';
+								                $s.='<div class="div04">'.$ll['yusuanprice'].'</div>';
+								                $s.='<div class="div04">'.$ll['xuanyangprice'].'</div>';
+								                $s.='<div class="div04">'.$ll['yusuannum'].'</div>';
+								                $s.='<div class="div04">'.$ll['shijinum'].'</div>';
+								                $s.='<div class="div04">'.$ll['cha'].'</div>';
+								                $s.='<div class="div04">'.$ll['total'].'</div>';
+								                $s.='<div class="div04">'.$ll['explain'].'</div>';
+												$s.='</div>';
+											}
+										}
+
+										//$s.='<div style="padding:4px 5px;border-bottom:1px #eeeeee solid"><span>'.$kk.'</span>.'.$ll['goods'].' 预算:'.$ll['yusuan'].$ll['unit'].' 实际:'.$ll['shiji'].$ll['unit'].' 变更:'.$ll['cha'].' 价格:'.$ll['price'].' 小计:'.$ll['total'].'</div>';
+									}
+
+									$s.='<div style="padding:4px 15px;border-bottom:1px #eeeeee solid;color:green"> 合计:'.$rs['alltotal'].' 商定总价:'.$rs['totalprice'].'</div>';
+									$s.= '<a href="javascript:" onclick="return js.createtable('.$rs['id'].','.$filed.')" style="color:blue"><u>导出文件</u></a><br>';
+
+								}		
+							echo $s;
+						?>
+					</td>
+					<td>
+					<?php 
+					if(!empty($rs['fileid'])){
+						$hello = explode(',',$rs['fileid']); //var_dump($hello);die;
+						for($index=0;$index<count($hello);$index++) 
+						{ //happy_add	
+							$button="";
+							$classhide="";
+							$i=m('file')->showimage($hello[$index]);
+							$nnn=explode(".",$i); 
+							if($nnn[1]=='jpg'||$nnn[1]=='png'){
+								$i2=$nnn[0].'_s.'.$nnn[1];
+							}else{
+								$i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+							}
+
+							if($index>1){
+								$classhide="classhide  id".$rs['id'];
+							}
+							if($index>2){
+								$button='<a href="javascript:" onclick="showhide('.$rs['id'].')" style="color:blue"><u>更多</u></a>';
+
+							}
+						?>
+						<div class="<?=$classhide?>">
+							<a href="javascript:" onclick="return js.downxia(<?=$hello[$index]?>)" style="color:blue"><u>下载</u></a>
+							<a href="javascript:" onclick="return js.downshow(<?=$hello[$index]?>)" style="color:blue"><u>预览</u></a>
+							<img src="<?=$i2?>" width="50px" class="showimage"><br> 
+						</div>
+						<?php 
+						$i='';
+						} 
+							echo $button;
+
+						}
+
+					?>
+					</td>
+					<td><?=$rs['optdt']?></td>
+
+				</tr>
+				<?php }?>
+			</table>
+		</div>
+		<div class="blank10"></div>
+		</div>
+		<?php } ?>
+		<div id="recordsss">
+		<div class="stitle zhu"><span onclick="location.reload()">查阅记录</span> <a temp="clo" href="javascript:;" onclick="$('#recordsss').remove();">×</a></div>
+		<div><ul class="ydullist">
+		<?php
+			if($da['arr']['readarr']){
+			foreach($da['arr']['readarr'] as $k=>$rs){
+				echo '<li title="共查阅'.$rs['stotal'].'次&#13;最后查阅：'.$rs['optdt'].'" ><img src="'.$rs['face'].'" align="absmiddle"><br><span>'.$rs['name'].'</span></li>';
+			}
+		?></ul></div>
+		</div>
+		
+		<?php 
+		}}
+		?>
+	</div>
+
+</div>
+</div>
+
+<?php
+if($stype==''){
+?>
+<script type="text/javascript" src="web/res/js/jquery-changeuser.js"></script>
+<link rel="stylesheet" type="text/css" href="mode/plugin/css/jquery-rockdatepicker.css"/>
+<script type="text/javascript" src="mode/plugin/jquery-rockdatepicker.js"></script>
+<script type="text/javascript" src="webmain/flow/input/inputjs/mode_work.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-imgview.js"></script>
+
+			<!-- 
+<script type="text/javascript" src="webmain/flow/input/inputjs/input.js"></script>
+<script type="text/javascript" src="webmain/flow/input/inputjs/mode_work.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-imgview.js"></script>
+			<tr><td class="tdys1">相关文件</td>
+				<td colspan="3" class="ys2">
+				<input name="check_fileid" type="hidden" id="fileidview-inputEl" value="26">
+				<div id="view_fileidview" style="width:97%;height:80px;border:1px #cccccc solid; background:white;overflow:auto"></div>
+				<div id="fileupaddbtn"><a href="javascript:;" class="blue" onclick="c.upload()"><u>＋添加文件</u></a></div>
+				</td></tr> -->
+<?php }?>
+<script type="text/javascript" >
+	$("input[name=check_status]").click(function(){	
+		//var i=$("input[name=check_status]:checked").parent();
+		$(".cks").children().removeClass('cksover');
+		$("input[name=check_status]:checked").parent().addClass('cksover');
+	 });
+	 $(function(){
+		// 2. 使用css的方式来设置宽高  
+		//获取当前屏幕的宽度
+		var smWidth = $(document).width()-50;
+	    $(".sm").css({"width":smWidth+"px"}); 
+	 });
+    function toggleshow(lx){
+        $('#showrecord'+lx+'').toggle();
+        $('#showcourse'+lx+'').toggle();
+    }
+    function showhide(lx){
+        $('.id'+lx+'').toggle();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+<style type="text/css">
+    body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{ margin:0; padding:0;font-size: 12px;}
+    body{ background-color: #efeff4;}
+
+    ul{ list-style-type: none;}
+    ul li{ float: left; overflow: hidden;}
+    #msgshowdivla{display: none !important;}
+    .big-img{ /*position: absolute; */
+    position: fixed;
+    z-index: 8;top: 0; left: 0; width: 100%; height: 100%; display: none; background-color: #000;}
+    th {font-weight: 500;}
+.f10fR,td{font-size: 14px;/*text-align: right;*/}
+.f10fL{font-size: 10px;/*text-align: left;*/}
+    .fR{    float: right;}
+</style><style>.hhhh{word-wrap:break-word;word-break:break-all;}</style>
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?4"></script>
+<!--标准mui.css-->
+<link rel="stylesheet" href="web/res/mui/css/mui.min.css">
+<link rel="stylesheet" href="web/res/mui/css/muipreviewimage.css">
+       
+<div class="big-img animated fadeInDown" id="bigImg">
+    <img id="lar-img"/>
+</div>
+
+<?php
+if($isheader==1)echo '<div class="header" id="header_title"><span onclick="js.back()" class="header-back"></span>'.$da['title'].'</div><div style="height:46px;overflow:hidden" class="suibianxiede"></div>';
+?>
+<table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" >
+    <tbody>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">业主姓名</td>
+            <td class="ys2" style="text-align:left;"><?=$gongdiinfo['chuban']?></td><!-- 
+            <td align="left" class="ys1" style="text-align:center;">联系方式</td>
+            <td class="ys2" style="text-align:left;"><a href="tel:<?=$gongdiinfo['telephone']?>" class="hhhh"><?=$gongdiinfo['telephone']?></a></td> -->
+        </tr>
+        <tr>
+            <td class="ys1" height="34" align="left" style="text-align:center;">项目名称</td>
+            <td  class="ys2" style="text-align:left;"><?=$gongdiinfo['title']?></td>
+        </tr>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">装修地址</td>
+            <td  class="ys2" style="text-align:left;"><?=$gongdiinfo['weizhi']?></td>
+        </tr>
+        <tr>
+            <td align="left" height="34" width="22%" style="text-align:center;">工程监理</td>
+            <td class="ys2" width="30%" style="text-align:left;"><?=$gongdiinfo['author']?></td><!-- 
+            <td height="34" align="left" class="ys1" style="text-align:center;">设计师</td>
+            <td class="ys2" style="text-align:left;"><?=$gongdiinfo['designer']?></td> -->
+        </tr>
+    </tbody>
+</table>
+ <?php
+    if(!empty($clpaifa)){
+
+    $pf=1;//配送计数                     
+    $th=1;//退货计数                     
+    foreach($clpaifa as $k=>$val){ ?> 
+
+        <div style="overflow:hidden; height:20px"></div>
+
+        <table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" style="text-align: center;;font-size: 10px">
+
+             <?php if($val['type']==0){ ?> 
+                    <div><span>&nbsp;&nbsp;第<?=$pf?>次配送</span><span style="float: right;"><?=$val['createdt']?>&nbsp;&nbsp;</span></div>
+             <?php $pf++;} ?> 
+             <?php if($val['type']==1){ ?> 
+                    <div><span >&nbsp;&nbsp;第<?=$th?>次退货</span><span style="float: right;"><?=$val['createdt']?>&nbsp;&nbsp;</span></div>
+             <?php $th++;} ?> 
+            <thead>
+                <th height="34" >材料名称</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>合计</th>
+                <th>备注</th>
+            </thead>
+            <tbody>
+             <?php 
+                if(!empty($val['goods'])){
+                    $goodslist=json_decode($val['goods']);
+                        foreach($goodslist as $kk=>$rrs){
+                            $ll=json_decode(json_encode($rrs),TRUE);
+                            if(isset($ll['goods'])&&$ll['goods']!='d'){ ?> 
+                                <tr>
+                                    <td height="34" class="f10fL"><?=$ll['goods']?></td>
+                                    <td class="f10fL"><?=$ll['paifanum']?><?=$ll['unit']?></td>
+                                    <td  class="f10fL">￥<?=$ll['price']?></td>
+                                    <td class="f10fL">￥<?=$ll['total']?></td>
+                                    <td style=" max-width: 81px;"><?=$ll['explain']?></td>
+                                </tr>
+                            <?php } ?> 
+                        <?php } ?> 
+                        <tr>
+                            <td ><?=$val['clgysname']?></td>
+                            <td height="34" align="left" class="ys1" style="text-align:center;">合计</td>
+                            <td class="ys2">￥<?=$val['alltotal']?></td>
+                            <td align="left" class="ys1" style="text-align:center;">商议价</td>
+                            <td >￥<?=$val['totalprice']?></td>
+
+                        </tr>
+
+            <?php } ?> 
+            <?php 
+            if(!empty($val['explain'])){ ?>
+                <tr>
+                    <td height="34" class="ys1" style=" min-width: 11px;">材料商备注
+                    </td>
+                    <td colspan="4"><?=$val['explain']?>
+                    </td>
+                </tr> 
+            <?php }     ?>
+
+            <?php 
+            $s='';
+            if(!empty($val['xgwj'])){ ?>
+                <tr>
+                    <td height="34" class="ys1">到货凭证
+                    </td>
+                    <td colspan="4" height="34" align="left" class="ys1">
+                    <?php 
+                        $hello = explode(',',$val['xgwj']);
+                        $s.='<ul class="img-lt">';
+
+                        for($index=0;$index<count($hello);$index++) 
+                        { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+
+                            $s.='<li class="animated bounceIn '.$hello[$index].'" id="'.$hello[$index].'" data-id="'.$i.'" style="width:88px; height:88px; padding-left:0px; padding-top:2px;">';
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'||$nnn[1]=='jpeg'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            $s.= '<img src="'.$i2.'" width="88px"  height="88px" class="showimage"  data-preview-src="'.$i.'" data-preview-group="1" >';
+                            }else if($nnn[1]=='pdf'){
+                                $i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }else{
+                                //$i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $i2="'http://oa.yuazen.cn/".$nnn[0].".html'";
+                                //$i2="'http://localhost:89/".$nnn[0].".html'";
+
+                                //$s.= '<a href="javascript:" onclick="window.location.href='.$i2.'" style="color:blue"><u>预览文件</u></a><br>';
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }
+
+                //$s.= '</li>';
+                        $i='';
+                        $i2='';
+                        $nnn='';
+                        ?>
+                    <?php 
+                        $i='';
+                        } 
+
+                     $s.='</ul>';
+                     echo $s;
+                    ?>
+                    </td>
+                </tr>
+            <?php }     ?>
+            </tbody>
+        </table> 
+ <?php } ?> 
+ <?php }else{ echo '<div style="overflow:hidden; padding: 50px 10px">暂无配送记录</div>';} ?> 
+        <div style="overflow:hidden; height:20px"></div>
+
+    <?php 
+    if($isinu){ ?>
+        <div class="fR" >
+        <button type="button" class="webbtn" onclick="c.paifa(<?=$params['cid']?>,<?=$params['fid']?>);">＋继续配送</button>
+        <button type="button" class="webbtn" onclick="c.tuihuo(<?=$params['cid']?>,<?=$params['fid']?>);">-退货</button></div>
+ <?php } ?> 
+        
+<script type="text/javascript">
+    
+var c={
+    paifa:function(cid,fid){
+    var url = 'index.php?m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    tuihuo:function(cid,fid){
+    var url = 'index.php?a=tuihuo&m=clpaifa&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+       // js.winiframe('材料配送', url);
+        return false;
+    },
+};
+</script>
+
+<script type="text/javascript" src="web/res/js/jquery-imgview.js"></script>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+    <script src="web/res/mui/js/mui.min.js"></script>
+    <script src="web/res/mui/js/mui.zoom.js"></script>
+    <script src="web/res/mui/js/mui.previewimage.js"></script>
+    <script>
+        mui.previewImage();
+    </script>

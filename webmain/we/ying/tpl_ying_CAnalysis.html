@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title><?=$da['title']?></title>
+<link rel="stylesheet" type="text/css" href="mode/weui/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+
+<script type="text/javascript" src="js/js.js"></script>
+<script type="text/javascript" src="js/jswx.js?2"></script>
+<script type="text/javascript" src="js/base64-min.js"></script>
+<script type="text/javascript" src="webmain/we/ying/ying.js?35"></script>
+<link rel="stylesheet" href="web/res/mui/css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="web/res/css/choose.css" />
+<script type="text/javascript" src="mode/plugin/jquery-rockdoupull.js"></script>
+<style>
+.chart {
+	height: 300px;
+	margin: 0px;
+	padding: 0px;
+}
+.chart2 {
+	height: 240px;
+	margin: 0px;
+	padding: 0px;
+}
+h5 {
+	margin-top: 30px;
+	font-weight: bold;
+}
+h5:first-child {
+	margin-top: 15px;
+}
+body,html{background-color:#f1f1f1;overflow:visible}
+.tab_bar:after{border: none;}
+
+.weui_search_bar:after{	
+    border: none;
+}
+#done{    width: 20%;}
+.mui-table-view-cell:after{background:none;}
+/*.menu-wrapper{top: 98px}*/
+</style>
+</head>
+
+
+<body>
+<?php if($web!='wxbro'){?>
+<div>
+	<div class="r-header">
+		<div class="r-header-text" onclick="location.reload()" id="header_title">统计分析</div>
+		<span onclick="js.back()" class="r-position-left r-header-btn"><i class="icon-chevron-left"></i></span>
+	</div>
+	<div class="blank50"></div>
+</div>
+<?php }?>
+	<div class="tab_bar" id="searchBar">
+
+        <div class="tab_tit box_col hide" id="menu-btn10"><span class="tit" id="brandRecord">品牌</span>
+        <span class="tit hide" id="brandRe"></span><i class="icon-angle-down"></i></div>
+
+		<div class="tab_tit box_col " id="menu-btn1"><span class="tit"  id="areaRecord">区域</span><i class="icon-angle-down"></i></div>
+        <div class="tab_tit box_col"  id="menu-btn2"><span class="tit" id="timeRecord">日期</span><i class="icon-angle-down"></i></div>
+        <div class="tab_tit box_col hide"  id="menu-btn3"><span class="tit" id="courseRecord">工地进度</span><i class="icon-angle-down"></i></div>
+        <div class="tab_tit box_col hide" id="menu-btn4"><span class="tit" id="projectRecord">工程监理</span><i class="icon-angle-down"></i></div>
+        <div class="tab_tit box_col " id="menu-btn5"><span class="tit" id="desginRecord">设计师</span><i class="icon-angle-down"></i></div>
+		<div class="tab_tit box_col hid8e"  id="menu-btn6"><span class="tit" id="laiyuanRecord">渠道</span><i class="icon-angle-down"></i></div>
+		<div class="tab_tit box_col hide"  id="menu-btn11"><span class="tit" id="supplierRecord">供货商</span><i class="icon-angle-down"></i></div>
+        <div class="tab_tit box_col hi8de"  id="menu-btn7"><span class="tit" id="unitnameRecord">筛选</span><i class="icon-angle-down"></i></div>
+    </div>
+
+
+<div id="menu-wrapper" class="menu-wrapper hidden">
+	<div id="menu" class="menu">
+		
+	</div>
+</div>
+<div id="menu-backdrop" class="menu-backdrop"></div>
+<div id="mainbody" class="r-touch" >
+	<div class="mui-content">
+		<div class="mui-content-padded ">
+			<div id="mainnew"></div>
+			<h5>柱图</h5>
+			<div class="chart " id="main1"></div>
+			<h5>饼图<div id="lfl" style="float: right;"></div></h5>
+			<div class="chart2 " id="main2"></div>
+			
+			<h5>线图</h5>
+			<div class="chart hide" id="main"></div>
+		</div>
+	</div>
+</div>
+<script src="web/res/mui/js/mui.min.js"></script>
+<script src="web/res/mui/libs/echarts.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-imgview.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+<script type="text/javascript" src="web/res/js/jquery-changeuser.js"></script>
+<script type="text/javascript" src="web/res/mui/js/mui.indexedlist1.js"></script>
+<script>
+var mianji='<?php echo json_encode($data['mianji']); ?>';
+var huxing='<?php echo json_encode($data['huxing']); ?>';
+var zxstyle='<?php echo json_encode($data['zxstyle']); ?>';
+var huxing=JSON.parse(huxing);
+var mianji=JSON.parse(mianji);
+var zxstyle=JSON.parse(zxstyle);
+</script>
+<script type="text/javascript" src="web/res/css/sh.js?31"></script>   
+<script type="text/javascript" src="web/res/css/choosetj.js?33"></script> 
+</body>
+</html>

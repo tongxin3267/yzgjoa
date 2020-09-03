@@ -1,0 +1,439 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?5"></script>
+<title><?=$da['title']?></title>
+<script language="javascript" src="js/floatsum.js"></script>
+<script language="javascript">
+var callback= '<?=$params['callback']?>',
+    showid      = '<?php $params['showid']=$params['showid']?$params['showid']:'rgfee';echo $params['showid'];?>',
+    data= '<?=$data?>',
+    upkey   = '<?=$params['upkey']?>';
+
+    data=eval(data);//转化为JSON对象
+var rgfee={
+    rgfeearr:[],
+    wcarr:[],
+    alltotal:0,
+    bool:false,
+    moi:0,
+    init:function()
+    {
+        this.obj=$('#upfile');
+        var fmsg = '';
+        if(fmsg!='')fmsg=fmsg.substr(1);
+    },
+    add:function(form)
+    {
+        
+        var s='<div class="mdiv" upload="true" id="'+this.moi+'"  onclick="rgfee.delgoods('+this.moi+')">';
+        var d = {};
+        var flag=true;
+        var g = {"goods":"工作项目","yusuan":"预算工作量","unit":"单位","shiji":"实际工作量","price":"人工费单价","explain":"备注"};
+        var t = $('#'+form).serializeArray();
+        s+='<div class="div04">'+this.moi+'</div>';
+        $.each(t, function() {
+            d[this.name] = this.value;
+            if(!this.value&&this.name!='explain') {alert(g[this.name]+'不能为空'); flag=false;return false;}
+            if(this.name=='unit'){
+                //var cha=d['shiji']-d['yusuan'];
+                //var cha=Math.abs(d['yusuan']-d['shiji']);
+                // var cha=(Number(d['shiji']-d['yusuan'])).toFixed(2);
+                var cha=accSub(d['shiji'],d['yusuan']);
+                s+='<div class="div04">'+cha+'</div>';
+                d['cha'] = cha;
+
+            }else if(this.name=='explain'){
+                //var total=d['price']*d['shiji'];
+                var total=accMul(d['price'],d['shiji']);
+                // var total=(Number(d['price']*d['shiji'])).toFixed(2);
+                rgfee.alltotal=accAdd(rgfee.alltotal,total);
+                s+='<div class="div04">'+total+'</div>';
+                d['total'] = total;
+                s+='<div class="div04">'+this.value+'</div>';
+                //隐藏价格
+                s+='<input value="'+total+'" id="total'+rgfee.moi+'">';
+            }else{
+                s+='<div class="div04">'+this.value+'</div>';
+            }
+        });
+        //隐藏单个项目内容
+        //s+='<input value="'+JSON.stringify(d)+'" id="sure'+this.moi+'">';
+        s+='</div>';
+        if (flag) {            
+            this.obj.append(s);
+            rgfee.wcarr.push(d);
+            get('quebtn').disabled=false;   
+            $('#alltotal').html(rgfee.alltotal);
+            this.moi++;
+            alert('项目添加成功');
+            $("button[type='reset']").trigger("click");
+        }
+
+
+        //alert(JSON.stringify(d));
+        
+        //up.wcarr.push({id:result.id,filename:arr.filename,filetype:arr.filetype,fileext:arr.fileext,filesize:arr.filesize,filesizecn:arr.filesizecn,filepath:result.filepath,thumbpath:result.thumbpath,width:result.width,height:result.height});
+        return false;
+    },
+    rand:function()
+    {
+        var rand    = ''+js.now('d_His')+''+parseInt(Math.random()*9999)+'';
+        return rand;
+    },
+    del:function(o,oi)
+    {
+        $(o).parent().parent().remove();
+        this.filearr[oi]=false;
+        this.rexushow();
+        return false;
+    },
+    clear:function()
+    {
+        $('#prou').hide();
+        this.wcarr  =[];
+        this.filearr=[];
+        this.alltotal  =0;
+        $('#alltotal').html(rgfee.alltotal);
+        this.obj.html('');
+    },
+    rexushow:function(){
+        var o   = $('#upfile').find('span');
+        for(var i=0;i<o.length;i++){
+            o[i].innerHTML=''+(i+1)+'. ';
+        }
+    },
+    getsid:function(a){
+        var sid = '',i;
+        for(i=0;i<a.length;i++){
+            sid+=','+a[i].id+'';
+        }
+        if(sid!='')sid = sid.substr(1);
+        return sid;
+    },
+    okla:function(){
+        var sid = this.getsid(this.wcarr);
+        var totalprice = $('#totalprice').val();
+        if(!totalprice) {alert('商定人工费总价不能为空');return false;}
+
+        <?php if($callback!=''){?>try{parent.<?=$callback?>(this.wcarr,js.request('params1'), js.request('params2'), sid)}catch(e){}<?php }?>
+        if(showid!=''){
+            try{parent.js.rgfeeshow(this.wcarr, showid, totalprice,this.alltotal);}catch(e){}
+            try{opener.js.rgfeeshow(this.wcarr, showid, totalprice,this.alltotal);}catch(e){}
+        }
+        this.closeaa();
+    },
+    closeaa:function(){
+        window.close();
+        try{parent.js.tanclose('rgfeewin')}catch(e){}
+    },
+    delgoods:function(id){
+       $('#'+id).addClass('red');         
+        //console.log(id);
+        js.confirm('删除将不能恢复，确定要<font color=red>删除</font>吗？',function(lx){
+            if(lx=='yes'){
+               //step1:重新计算总价
+                var total=$('#total'+id).val();   
+                //console.log(total);                           
+                rgfee.alltotal=rgfee.alltotal-total;
+                $('#alltotal').html(rgfee.alltotal);
+
+                //step2:移除该项目
+               $('#'+id).remove(); 
+               rgfee.wcarr.splice(id,1,"del")
+                //console.log(rgfee.wcarr);
+                //alert('项目移除成功');
+            }else{
+                $('#'+id).removeClass('red');         
+
+            }
+        });
+
+    },
+    getgoods:function(){
+        //var fenlei=$("#fenlei").val();
+        var fenlei=$('#fenlei option:selected').val();//选中的值
+        $('#goods').html('');
+    
+        var xiangmu=data[fenlei];
+        //console.log(xiangmu);
+
+        var s='<option value="">-请选择-</option>';
+        
+        $.each(xiangmu,function(i,n){
+            s+='<option value="'+n.name+'" price="'+n.price+'" unit="'+n.unit+'" gid="'+n.id+'" >'+n.name+'</option>';
+        });
+        $('#goods').html(s);
+
+    },
+    setgoods:function(){
+        var price=$('#goods').find("option:selected").attr("price");
+        var unit=$('#goods').find("option:selected").attr("unit");
+        $('#price').val(price);
+        $('#unit').val(unit);
+    }
+}
+window.onbeforeunload=function(){
+    if(rgfee.bool)return '文件正在上传，确定要关闭页面吗？';
+}
+
+$(function(){
+    var mobile_flag = isMobile(); // true为PC端，false为手机端
+    if(mobile_flag){
+        $('#pc').hide();
+    }else{
+        $('#mobile').hide();
+    }
+
+});
+$(function() {
+   //手机端网页：安卓手机输入法遮挡输入框问题
+    if (/Android/gi.test(navigator.userAgent)) {
+        window.addEventListener('resize', function() {
+            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                window.setTimeout(function() {
+                document.activeElement.scrollIntoViewIfNeeded();
+                }, 0);
+            }
+        })
+    }
+})
+
+function isMobile() {
+    var userAgentInfo = navigator.userAgent;
+
+    var mobileAgents = [ "Android", "iPhone", "SymbianOS", "Windows Phone", "iPad","iPod"];
+
+    var mobile_flag = false;
+
+    //根据userAgent判断是否是手机
+    for (var v = 0; v < mobileAgents.length; v++) {
+        if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
+            mobile_flag = true;
+            break;
+        }
+    }
+
+     var screen_width = window.screen.width;
+     var screen_height = window.screen.height;    
+
+     //根据屏幕分辨率判断是否是手机
+     if(screen_width < 500 && screen_height < 800){
+         mobile_flag = true;
+     }
+
+     return mobile_flag;
+}
+
+</script>
+<style type="text/css">
+button{cursor:pointer}
+.alert{ padding:1px 5px; border:1px #996 solid; background-color:#ffffff; color:#933}
+*{ font-size:14px;font-family:微软雅黑,Verdana, Geneva, sans-serif;}
+.mdiv{ border-bottom:1px #cccccc solid; height:22px; overflow:hidden}
+.mdiv div{ float:left; height:22px; line-height:22px; overflow:hidden; padding:0px 3px}
+.div01{ width:55%;text-align:left;border-right:1px #cccccc solid;}
+.div02{ width:15%; text-align:center;border-right:1px #cccccc solid;}
+.div03{ width:25%;text-align:left}
+.div04{ width:10.5%;text-align:left}
+.div05{ width:100%;text-align:right}
+.div06{ width:40%;text-align:left}
+#prou{overflow:hidden; background-color:#ffffff; margin:5px 0px; border:1px #666 solid;padding:0px; text-align:left;font-size:12px; position:relative; height:18px;line-height:18px}
+#prou span{ left:5px; position:absolute; top:2px}
+#proudiv{ position:absolute; left:0px; top:0px; height:18px; overflow:hidden; background-color:#09F;width:0%}
+button{ cursor:pointer}
+#footmsg{ text-align:left; padding:3px}
+.quebntha{position:fixed;right:10px;bottom:10px;}
+.webbtn{color:#ffffff;opacity:0.8; background-color:#1abc9c; padding:5px 8px; border:none; cursor:pointer;font-size:14px}
+.webbtn:disabled{background-color:#aaaaaa; color:#eeeeee}
+.webbtn:hover{box-shadow:0px 0px 5px rgba(0,0,0,0.3);opacity:1}
+.lurim {
+    text-align: right;
+    padding: 0px 5px;
+}
+.divinput {
+    padding: 2px;
+    background-color: white;
+}
+.red {
+    color: red;
+}
+td, button {
+    font-size: 12px;
+}
+</style>
+</head>
+<body style="padding:1px" onLoad="rgfee.init()">
+<center>
+<div style="padding:10px">
+<form name="myform" id="form1">
+    <div style="background:white;padding-top:10px">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="lurim" nowrap="">工作项目:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <select style="width:47%"  class="inputs" id="fenlei"  onClick="rgfee.getgoods()" onchange="rgfee.getgoods()">
+                                <option value="">-请选择-</option>
+                                 <?php
+                                    //var_dump($fenleilist);                           
+                                    foreach($fenleilist as $k=>$val){ 
+                                        echo "<option value=".$k.">".$val['name']."</option>";
+                                    }
+                                ?> 
+                            </select>
+                            <select style="width:47%" id="goods" name="goods" class="inputs" onchange="rgfee.setgoods()">
+                                <option value="">-请选择-</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">预算工作量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="yusuan" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">实际工作量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="shiji" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">单位:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" id="unit" name="unit" placeholder=""></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">人工费单价:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" id="price" name="price" placeholder=""></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="rgfee.add('form1')">＋添加</button></tfoot>
+        </table>
+    </div>
+</form>
+<div style="overflow:hidden; height:5px"></div>
+
+<form name="myform2" id="form2">
+    <div style="background:white;padding-top:10px">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="lurim" nowrap="">工作项目:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="goods" placeholder="（手动填写）"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">预算工作量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="yusuan" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">实际工作量:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="shiji" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">单位:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="unit" placeholder="m、㎡、项、只"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">人工费单价:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="price" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="rgfee.add('form2')">＋添加</button></tfoot>
+        </table>
+    </div>
+</form>
+</div>
+<div align="left" style="padding:3px"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    </td><button type="button" class="webbtn" id="clearbtn" onClick="rgfee.clear()">－清除所有项目</button>&nbsp; <button type="button" class="webbtn" onClick="rgfee.closeaa()">关闭</button></td>
+    <td align="right" style="display:none"><button type="button" class="webbtn" id="startbtn" onClick="rgfee.upload()">开始上传</button></td>
+  </tr>
+</table>
+<div style="overflow:hidden; height:5px"></div>
+<div id="prou" style="display:none"><div id="proudiv"></div><span id="proushow">等待上传...</span></div>
+<div class="mdiv" style="background-color:#eeeeee">
+<div class="div04">序号</div>
+<div class="div04">工作项目</div>
+<div class="div04">预算工作量</div>
+<div class="div04">实际工作量</div>
+<div class="div04">变更工作量</div>
+<div class="div04">单价</div>
+<div class="div04">总价</div>
+<div class="div04">备注</div>
+</div>
+<div id="upfile"></div>
+<div id="footmsg">
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">合计：</div>
+        <div class="div06" id="alltotal"></div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">商定人工费总价：</div>
+        <div class="div06" style="height: 30px" >
+            <div class="divinput" style="height: 30px">
+                <input class="inputs" type="text" id="totalprice"  style="line-height: 30px;" 
+                name="totalprice" placeholder="（手动填写）"></div>
+        </div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div05" style="height: 30px"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="rgfee.okla()">√制作完成</button></div>
+    </div>
+</div>
+<div style="overflow:hidden; height:50px" id="mobile"></div>
+<div style="overflow:hidden; height:110px" id="pc"></div>
+
+<!-- 
+<div class="quebntha"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="rgfee.okla()">√制作完成</button></div> -->
+</center>
+</body>
+</html>

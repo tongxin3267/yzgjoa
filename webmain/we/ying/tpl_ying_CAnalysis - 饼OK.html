@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title><?=$da['title']?></title>
+<link rel="stylesheet" type="text/css" href="mode/weui/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/js.js"></script>
+<script type="text/javascript" src="js/jswx.js"></script>
+<script type="text/javascript" src="js/base64-min.js"></script>
+
+<!--标准mui.css-->
+<link rel="stylesheet" href="web/res/mui/css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="web/res/mui/css/app.css" />
+<style>
+		.chart {
+			height: 200px;
+			margin: 0px;
+			padding: 0px;
+		}
+		h5 {
+			margin-top: 30px;
+			font-weight: bold;
+		}
+		h5:first-child {
+			margin-top: 15px;
+		}
+	</style>
+</head>
+
+
+<body>
+<?php if($web!='wxbro'){?>
+<div>
+	<div class="r-header">
+		<div class="r-header-text" onclick="location.reload()" id="header_title">统计分析</div>
+		<span onclick="js.back()" class="r-position-left r-header-btn"><i class="icon-chevron-left"></i></span>
+	</div>
+	<div class="blank50"></div>
+</div>
+<?php }?>
+
+
+<div class="mui-content">
+	<div class="mui-content-padded">
+		<h5>柱图</h5>
+		<div class="chart" id="main"></div>
+		<h5>饼图</h5>
+		<div class="chart" id="main2"></div>
+	</div>
+</div>
+<script src="web/res/mui/js/mui.min.js"></script>
+<script src="web/res/mui/libs/echarts.js"></script>
+<script>
+$(document).ready(function(){
+ 	$.ajax({
+        type: 'post', 
+        url: "index.php?d=we&m=ying&a=loadData",
+        data:{},
+        dataType:'json', 
+        success: function(ret){
+			var data=ret.data.data,i,seriesdata=[],legenddata,xAxisdata=[],yAxisdata=[];
+			var legenddata="合计";
+			var laiyuandata=['土巴兔','优居客', '丁丁网', 'icolor','凯特猫', '家要美', '电销部', '介绍', '进店', '来电咨询', '网上预约', '工程部营销', '其他'];
+			var lai={},bota=ret.data.bo,bolegenddata=["合计"],boseriesdata=[];
+			var laiyuan=[];
+
+			$.each(data,function(index,item){ 
+				xAxisdata.push(item.status);
+				yAxisdata.push(item.ta);
+				var sd={};
+				sd.value=item.ta;
+				sd.name=item.status;
+				seriesdata.push(sd);
+			});
+
+				boseriesdata.push(seriesdata);
+
+			$.each(bota,function(ll,ss){ 
+				bolegenddata.push(ll);
+				var bod={};
+				bod.type='bar';
+				bod.name=ll;
+				bod.data=ss;
+				boseriesdata.push(bod);
+			});
+
+			console.log(bolegenddata,boseriesdata);
+			showdatas(legenddata,xAxisdata,yAxisdata,seriesdata,bolegenddata,boseriesdata);
+      }});
+});
+
+function showdatas(legenddata,xAxisdata,yAxisdata,seriesdata,bolegenddata,boseriesdata) {
+	var	legenddata2=[legenddata];			
+	var byId = function(id) {
+		return document.getElementById(id);
+	};
+	// 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {},
+            legend: {
+                data:legenddata2
+            },
+			xAxis: [{
+				type: 'category',
+				data: xAxisdata
+			}],
+            yAxis: {},
+			series: [{
+				name: legenddata,
+				type: 'bar',
+				data: yAxisdata
+			}/*,
+        {
+            name:'平均温度',
+            type:'line',
+            data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+        }*/]
+        };
+
+		var option2 = {
+		    title : {
+		        text: '',
+		        subtext: '',
+		        x:'center'
+		    },
+		    tooltip : {
+		        trigger: 'item',
+		        formatter: "{a} <br/>{b} : {c} ({d}%)"
+		    },
+		    legend: {
+		        orient: 'vertical',
+		        left: 'left',
+		        data: xAxisdata
+		    },
+		    series : [
+		        {
+		            name: '',
+		            type: 'pie',
+		            radius : '55%',
+		            center: ['50%', '60%'],
+		            data:seriesdata,
+		            itemStyle: {
+		                emphasis: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }
+		    ]
+		};
+
+		// 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(byId('main'));
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+		// 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(byId('main2'));
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option2);
+    }
+		</script>
+</body>
+</html>

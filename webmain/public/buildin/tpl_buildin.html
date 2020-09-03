@@ -1,0 +1,560 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+
+<link href="webmain/css/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{ margin:0; padding:0;}
+    body{ background-color: #efeff4;}
+
+    ul{ list-style-type: none;}
+    ul li{ float: left; overflow: hidden;}
+    #msgshowdivla{display: none !important;}
+    .big-img{ /*position: absolute; */
+    position: fixed;
+    z-index: 8;top: 0; left: 0; width: 100%; height: 100%; display: none; background-color: #000;}
+    .rockdatepicker div {    background-color: #dedede !important;    }
+    .rockdatepicker {    z-index: 6   }
+    #quebtn {    z-index: 5   }
+</style><style>.hhhh{word-wrap:break-word;word-break:break-all;}</style>
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?6"></script>
+<script language="javascript" src="js/floatsum.js"></script>
+
+<script language="javascript" src="js/jquery-1.11.1.min.js"></script>
+<script language="javascript" src="js/jquery.searchableSelect.js?5"></script>
+
+<script type="text/javascript" src="mode/plugin/jquery-rockdatepicker.js"></script>
+
+
+
+<title><?=$da['title']?></title>
+<script language="javascript">
+var callback= '<?=$params['callback']?>',
+    showid      = '<?php echo $params['cid'];?>',
+    fid= '<?=$params['fid']?>',
+    cid= '<?=$params['cid']?>',
+    data= '<?=$data?>',
+    type= '<?=$type?>',
+    upkey   = '<?=$params['upkey']?>';
+var anzonly = ["73","135"];
+
+    data=eval(data);//转化为JSON对象
+var buildin={
+    buildinarr:[],
+    wcarr:[],
+    alltotal:0,
+    bool:false,
+    moi:0,
+    init:function()
+    {
+        this.obj=$('#upfile');
+        var fmsg = '';
+        if(fmsg!='')fmsg=fmsg.substr(1);
+    },
+    add:function(form)
+    {
+        
+        var s='<div class="mdiv" upload="true" id="'+this.moi+'"  onclick="buildin.delgoods('+this.moi+')">';
+        var d = {};
+        var flag=true;
+        var g = {"goods":"材料名称","unit":"单位","yusuannum":"预算数量","shijinum":"实际数量","model":"型号","color":"色号","price":"单价","explain":"备注"};
+        var t = $('#'+form).serializeArray();
+        s+='<div class="div04">'+this.moi+'</div>';
+        $.each(t, function() {
+            d[this.name] = this.value;
+            if(!this.value&&this.name!='explain') {alert(g[this.name]+'不能为空'); flag=false;return false;}
+            if(this.name=='goods'){
+                s+='<div class="div03">'+this.value+'</div>';              
+
+            }else if(this.name=='explain'){ 
+                //console.log(anzonly.indexOf(cid),cid);
+                if (anzonly.indexOf(cid) > -1) {                    
+                    var total=(accMul(d['price'],d['shijinum'])).toFixed(2);
+                    buildin.alltotal=(accAdd(buildin.alltotal,total)).toFixed(2);
+
+                    s+='<div class="div04">'+total+'</div>';
+                    d['total'] = total;
+                    s+='<div class="div04">'+this.value+'</div>';
+                    //隐藏价格
+                    s+='<input value="'+total+'" id="total'+buildin.moi+'">';
+                }else{
+                    s+='<div class="div03">'+this.value+'</div>';                    
+                }
+
+            }else if(this.name=='price'){
+                s+='<div class="div02">'+this.value+'*'+d['shijinum']+d['unit']+'</div>';
+            }else if(this.name=='unit' &&( anzonly.indexOf(cid) == -1) ){
+                s+='<div class="div02">'+d['yusuannum']+d['unit']+'</div>';               
+            }else if(this.name=='shijinum' || this.name=='yusuannum' || this.name=='unit'){             
+            }else{
+                s+='<div class="div04">'+this.value+'</div>';
+            }
+        });
+        //隐藏单个项目内容
+        //s+='<input value="'+JSON.stringify(d)+'" id="sure'+this.moi+'">';
+        s+='</div>';
+        if (flag) {            
+            this.obj.append(s);
+            buildin.wcarr.push(d);
+            get('quebtn').disabled=false;   
+            
+            if (anzonly.indexOf(cid) > -1) {                    
+
+                $('#alltotal').html(buildin.alltotal);
+            }
+            this.moi++;
+            alert('添加成功');
+            $("button[type='reset']").trigger("click");
+        }
+
+
+        //alert(JSON.stringify(d));
+        
+        //up.wcarr.push({id:result.id,filename:arr.filename,filetype:arr.filetype,fileext:arr.fileext,filesize:arr.filesize,filesizecn:arr.filesizecn,filepath:result.filepath,thumbpath:result.thumbpath,width:result.width,height:result.height});
+        return false;
+    },
+    rand:function()
+    {
+        var rand    = ''+js.now('d_His')+''+parseInt(Math.random()*9999)+'';
+        return rand;
+    },
+    del:function(o,oi)
+    {
+        $(o).parent().parent().remove();
+        this.filearr[oi]=false;
+        this.rexushow();
+        return false;
+    },
+    clear:function()
+    {
+        $('#prou').hide();
+        this.wcarr  =[];
+        this.alltotal  =0;
+        $('#alltotal').html(buildin.alltotal);
+        this.filearr=[];
+        this.obj.html('');
+    },
+    rexushow:function(){
+        var o   = $('#upfile').find('span');
+        for(var i=0;i<o.length;i++){
+            o[i].innerHTML=''+(i+1)+'. ';
+        }
+    },
+    getsid:function(a){
+        var sid = '',i;
+        for(i=0;i<a.length;i++){
+            sid+=','+a[i].id+'';
+        }
+        if(sid!='')sid = sid.substr(1);
+        return sid;
+    },
+    okla:function(){
+        var sid = this.getsid(this.wcarr);
+        var totalprice = 0;
+
+        if (anzonly.indexOf(cid) > -1) { 
+            var totalprice = $('#totalprice').val();
+            if(!totalprice) {alert('商定总价不能为空');return false;}
+        }
+
+        var clgysid=$('#clgysid option:selected').val();//选中的值
+        var clgysname=$('#clgysid option:selected').text();//选中的值
+        var zxstyle=$('#zxstyle').find("option:selected").val();
+        var ralatedid=$('#ralatedid').find("option:selected").val();
+        if(!clgysid) {alert('请选择材料供货商');return false;}
+        if(!ralatedid&&anzonly.indexOf(cid) > -1 && type==0) {alert('请选择测量记录');return false;}
+
+        console.log(zxstyle);
+        var buildtime = $('#buildtime').val();
+        if(!buildtime) {alert('时间不能为空');return false;}
+
+        var url = 'index.php?m=buildin&d=public&a=buildinsave&cid='+cid+'&fid='+fid+'';
+        var da = {goods:JSON.stringify(this.wcarr),totalprice:totalprice,clgysid:clgysid,zxstyle:zxstyle,clgysname:clgysname,ralatedid:ralatedid,alltotal:this.alltotal,buildtime:buildtime,type:type};
+        // console.log(da); return false;
+        js.ajax(url,da,function(a){
+            alert(a.msg);
+            if(a.success){
+                // window.close();
+                parent.js.back();
+
+            }
+        },'post,json',function(){
+            alert('处理失败请重试');
+        });
+
+        //this.closeaa();
+    },
+    closeaa:function(){
+        window.close();
+        try{parent.js.tanclose('buildinwin')}catch(e){}
+    },
+    delgoods:function(id){
+       $('#'+id).addClass('red');         
+        //console.log(id);
+        js.confirm('删除将不能恢复，确定要<font color=red>删除</font>吗？',function(lx){
+            if(lx=='yes'){
+               //step1:重新计算总价
+                var total=$('#total'+id).val();   
+                //console.log(total);                           
+                buildin.alltotal=buildin.alltotal-total;
+                $('#alltotal').html(buildin.alltotal);
+
+                //step2:移除该项目
+               $('#'+id).remove(); 
+               buildin.wcarr.splice(id,1,"del")
+                //console.log(buildin.wcarr);
+                //alert('项目移除成功');
+            }else{
+                $('#'+id).removeClass('red');         
+
+            }
+        });
+
+    },
+    getgoods:function(){
+        //var fenlei=$("#fenlei").val();
+        var fenlei=$('#fenlei option:selected').val();//选中的值
+        $('#goods').html('');
+    
+        var xiangmu=data[fenlei];
+        //console.log(xiangmu);
+
+        var s='<option value="">-请选择-</option>';
+        
+        $.each(xiangmu,function(i,n){
+            s+='<option value="'+n.name+'" price="'+n.price+'" unit="'+n.unit+'" gid="'+n.id+'" >'+n.name+'</option>';
+        });
+        $('#goods').html(s);
+
+        if($("#tabindex").length <=0) {
+            $('#goods').searchableSelect();
+        }else{
+            $("#tabindex").remove();
+            $('#goods').searchableSelect();
+        }
+        
+
+    },
+    setgoods:function(){
+        var price=$('#goods').find("option:selected").attr("price");
+        var unit=$('#goods').find("option:selected").attr("unit");
+        $('#price').val(price);
+        $('#unit').val(unit);
+    },
+    showother:function(){
+        var ralatedid=$('#ralatedid').find("option:selected").val();
+        if (ralatedid) {
+            $('#other').show();
+        }else{
+            $('#other').hide();
+        }
+        // console.log(ralatedid);
+
+    }
+}
+window.onbeforeunload=function(){
+    if(buildin.bool)return '文件正在上传，确定要关闭页面吗？';
+}
+
+$(function(){
+
+    if (anzonly.indexOf(cid) > -1&&type==0) { 
+        $('#other').hide();
+    }
+    var mobile_flag = isMobile(); // true为PC端，false为手机端
+    if(mobile_flag){
+        $('#pc').hide();
+    }else{
+        $('#mobile').hide();
+    }
+
+});
+$(function() {
+   //手机端网页：安卓手机输入法遮挡输入框问题
+    if (/Android/gi.test(navigator.userAgent)) {
+        window.addEventListener('resize', function() {
+            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                window.setTimeout(function() {
+                document.activeElement.scrollIntoViewIfNeeded();
+                }, 0);
+            }
+        })
+    }
+})
+
+function isMobile() {
+    var userAgentInfo = navigator.userAgent;
+
+    var mobileAgents = [ "Android", "iPhone", "SymbianOS", "Windows Phone", "iPad","iPod"];
+
+    var mobile_flag = false;
+
+    //根据userAgent判断是否是手机
+    for (var v = 0; v < mobileAgents.length; v++) {
+        if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
+            mobile_flag = true;
+            break;
+        }
+    }
+
+     var screen_width = window.screen.width;
+     var screen_height = window.screen.height;    
+
+     //根据屏幕分辨率判断是否是手机
+     if(screen_width < 500 && screen_height < 800){
+         mobile_flag = true;
+     }
+
+     return mobile_flag;
+}
+
+</script>
+<style type="text/css">
+button{cursor:pointer}
+.alert{ padding:1px 5px; border:1px #996 solid; background-color:#ffffff; color:#933}
+*{ font-size:14px;font-family:微软雅黑,Verdana, Geneva, sans-serif;}
+.mdiv{ border-bottom:1px #cccccc solid; height:22px; overflow:hidden}
+.mdiv div{ float:left; height:22px; line-height:22px; overflow:hidden; padding:0px 3px}
+.div01{ width:55%;text-align:left;border-right:1px #cccccc solid;}
+.div02{ width:15%; text-align:left;border-right:1px #cccccc solid;}
+.div03{ width:20%;text-align:left}
+.div04{ width:10.5%;text-align:left}
+.div05{ width:100%;text-align:right}
+.div06{ width:40%;text-align:left}
+#prou{overflow:hidden; background-color:#ffffff; margin:5px 0px; border:1px #666 solid;padding:0px; text-align:left;font-size:12px; position:relative; height:18px;line-height:18px}
+#prou span{ left:5px; position:absolute; top:2px}
+#proudiv{ position:absolute; left:0px; top:0px; height:18px; overflow:hidden; background-color:#09F;width:0%}
+button{ cursor:pointer}
+#footmsg{ text-align:left; padding:3px}
+.quebntha{position:fixed;right:10px;bottom:10px;}
+.webbtn{color:#ffffff;opacity:0.8; background-color:#1abc9c; padding:5px 8px; border:none; cursor:pointer;font-size:14px}
+.webbtn:disabled{background-color:#aaaaaa; color:#eeeeee}
+.webbtn:hover{box-shadow:0px 0px 5px rgba(0,0,0,0.3);opacity:1}
+.lurim {
+    text-align: right;
+    padding: 0px 5px;
+}
+.divinput {
+    padding: 2px;
+    background-color: white;
+}
+.red {
+    color: white;
+}
+td, button {
+    font-size: 12px;
+}
+</style>
+</head>
+<body style="padding:1px" onLoad="buildin.init()">
+<center>
+
+<?php
+if($isheader==1)echo '<div class="header" id="header_title"><span onclick="js.back()" class="header-back"></span>'.$da['title'].'</div><div style="height:46px;overflow:hidden" class="suibianxiede"></div>';
+?>
+<div style="overflow:hidden; height:5px"></div>
+  
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+            <tbody>
+                <?php
+                $anzonly=getconfig('anzonly');
+                if($celiang&& in_array($params['cid'], $anzonly) && $type==0){ ?> 
+                <tr>
+                    <td class="lurim" nowrap="">测量记录:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <select style="width:47%"  class="inputs" id="ralatedid"  onchange="buildin.showother()">
+                                <option value="">-请选择-</option>
+                                 <?php
+                                    foreach($celiang as $k=>$val){ 
+                                        echo "<option value='".$val['id']."'>".$val['clgysname']." 测量时间:".$val['buildtime']."</option>";
+                                    }
+                                    // var_dump($val['clgysname']);      die; 
+                                ?> 
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <?php }else if(in_array($params['cid'], $anzonly) && $type==0){
+                    echo "暂无测量记录，无法通知安装";
+                }?>  
+            </tbody>
+        </table>
+<form name="myform" id="form2">
+    <div style="background:white;padding-top:10px">
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="other">
+            <tbody>    
+                <tr>
+                    <td class="lurim" nowrap="">名称:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="goods" placeholder="（手动填写）"></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <?php 
+                if(in_array($params['cid'], $anzonly)){ ?> 
+                    <tr>
+                        <td class="lurim" nowrap="">实际数量:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="shijinum" placeholder="（手动填写）"></div>
+                        </td>
+                    </tr>
+                <?php  } else{ ?>                 
+                    <tr>
+                        <td class="lurim" nowrap="">预算数量:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="yusuannum" placeholder="（手动填写）"></div>
+                        </td>
+                    </tr>
+                <?php  } ?>  
+                <tr>
+                    <td class="lurim" nowrap="">单位:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="unit" placeholder="（m、㎡、项、只、扇、套）"></div>
+                        </div>
+                    </td>
+                </tr>
+                <?php if(in_array($params['cid'], $anzonly)){ ?>
+                    <tr>
+                        <td class="lurim" nowrap="">单价:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="price" placeholder="（手动填写）"></div>
+                        </td>
+                    </tr>
+                <?php  } ?>  
+                <tr>
+                    <td class="lurim" nowrap="">型号:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="model"  placeholder="（手动填写）"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">色号:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="color" placeholder="（手动填写）"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="buildin.add('form2')">＋添加</button></tfoot>
+        </table>
+    </div>
+</form>
+</div>
+<div align="left" style="padding:3px"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    </td><button type="button" class="webbtn" id="clearbtn" onClick="buildin.clear()">－清除所有项目</button><!-- &nbsp; <button type="button" class="webbtn" onClick="buildin.closeaa()">关闭</button> --></td>
+    <td align="right" style="display:none"><button type="button" class="webbtn" id="startbtn" onClick="buildin.upload()">开始上传</button></td>
+  </tr>
+</table>
+
+<div style="text-align: left;">
+    <span>业主姓名： <?=$gongdiinfo['chuban']?></span><br>
+    <span>项目名称： <?=$gongdiinfo['title']?></span><br>
+    <span>装修地址： <?=$gongdiinfo['weizhi']?></span><br>
+    <span>工程监理： <?=$gongdiinfo['author']?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;联系方式： <?=$mobile?></span><br>
+</div>
+<div style="overflow:hidden; height:5px"></div>
+<div id="prou" style="display:none"><div id="proudiv"></div><span id="proushow">等待上传...</span></div>
+<div class="mdiv" style="background-color:#eeeeee">
+<div class="div04">序号</div>
+<div class="div03">名称</div>
+<div class="div02">数量</div>
+<div class="div04">型号</div>
+<div class="div04">色号</div>
+<?php if(in_array($params['cid'], $anzonly)){ ?>
+<div class="div04">小计</div>
+<?php } ?>
+<div class="div04">备注</div>
+</div>
+<div id="upfile"></div>
+<div id="footmsg">
+
+<?php if(in_array($params['cid'], $anzonly)){ ?>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">合计：</div>
+        <div class="div06" id="alltotal"></div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">商定总价：</div>
+        <div class="div06"  style="height: 30px">
+            <div class="divinput" style="height: 30px">
+                <input class="inputs" type="number" id="totalprice"  style="line-height: 30px;" 
+                name="totalprice" placeholder="（手动填写）"></div>
+        </div>
+    </div>
+<?php } ?>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">装修类型：</div>
+        <div class="div06"  style="height: 30px">
+            <select name="zxstyle" id="zxstyle" class="inputs">
+                <option value="2" selected="selected">局部</option>
+                <option value="3">整屋</option>
+            </select>
+        </div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01">材料供应商：</div>
+        <div class="div06"  style="height: 30px">
+            <select name="clgysid" id="clgysid" class="inputs">
+                <option value="">-请选择-</option>
+               <?php
+                    foreach($clgys as $k=>$val){ 
+                        echo "<option value=".$val['id'].">".$val['name']."</option>";
+                    }
+                ?>  
+            </select>
+        </div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div01"><?=$flag?>时间：</div>
+        <div class="div06"  style="height: 30px">
+            <div class="divinput" style="height: 30px">
+                <input class="inputs" type="text" id="buildtime" onclick="js.datechange(this,'date')" style="line-height: 30px;" 
+                name="totalprice" placeholder="（请选择）"></div>
+        </div>
+    </div>
+    <div class="mdiv" style="background-color:#eeeeee;    height: 30px;">
+        <div class="div05" style="height: 30px"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="buildin.okla()">√制作完成</button></div>
+    </div>
+</div><!-- 
+<div style="overflow:hidden; height:50px" id="mobile"></div>
+<div style="overflow:hidden; height:110px" id="pc"></div> -->
+
+<!-- 
+<div class="quebntha"><button type="button" disabled style="padding:5px 15px" class="webbtn" id="quebtn" onClick="buildin.okla()">√制作完成</button></div> -->
+</center>
+</body>
+</html>

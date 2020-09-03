@@ -1,0 +1,162 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+<style type="text/css">
+    body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{ margin:0; padding:0;}
+    body{ background-color: #efeff4;}
+
+    ul{ list-style-type: none;}
+    ul li{ float: left; overflow: hidden;}
+    #msgshowdivla{display: none !important;}
+    .big-img{ /*position: absolute; */
+    position: fixed;
+    z-index: 8;top: 0; left: 0; width: 100%; height: 100%; display: none; background-color: #000;}
+    th {font-weight: 500;}
+    .fR{    float: right;}
+</style><style>.hhhh{word-wrap:break-word;word-break:break-all;}</style>
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?4"></script>
+
+ <?php
+    if(!empty($gongdiinfo)){
+
+    $start=1;//开始计数                     
+    $i=1;//配送计数                     
+    $j=1;//退货计数                     
+    foreach($gongdiinfo as $k=>$val){ ?> 
+    <?php
+        if($start==1){
+    ?>
+
+<table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%">
+    <tbody>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">业主姓名</td>
+            <td class="ys2" style="text-align:left;"><?=$val['chuban']?></td>
+            <td align="left" class="ys1" style="text-align:center;">联系方式</td>
+            <td class="ys2" style="text-align:left;"><a href="tel:<?=$val['telephone']?>" class="hhhh"><?=$val['telephone']?></a></td>
+        </tr>
+        <tr>
+            <td class="ys1" height="34" align="left" style="text-align:center;">项目名称</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$val['title']?></td>
+        </tr>
+        <tr>
+            <td height="34" align="left" class="ys1" style="text-align:center;">装修地址</td>
+            <td colspan="3" class="ys2" style="text-align:left;"><?=$val['weizhi']?></td>
+        </tr>
+        <tr>
+            <td align="left" class="ys1" width="22%" style="text-align:center;">工程监理</td>
+            <td class="ys2" width="30%" style="text-align:left;"><?=$val['author']?></td>
+            <td height="34" align="left" class="ys1" style="text-align:center;">设计师</td>
+            <td class="ys2" style="text-align:left;"><?=$val['designer']?></td>
+        </tr>
+    </tbody>
+</table>
+    <?php   };
+    ?>
+             <?php $start++; ?> 
+
+        <div style="overflow:hidden; height:20px"></div>
+
+        <table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" style="text-align: center;">
+
+                
+            <?php 
+                $coursename="基础材料";
+                switch ($val['cid']) {
+                //0配送申请提交，1材料商已配送，2退货申请提交，3材料商已退货
+                    case '50':
+                        $coursename="基础材料";
+                        break;
+                    case '52':
+                        $coursename="水电材料";
+                        break;
+                    case '56':
+                        $coursename="泥木材料";
+                        break;
+                    case '62':
+                        $coursename="油漆材料";
+                        break;
+                    
+                    default:
+                        $coursename="基础材料";
+                        break;
+                } ?>
+             <?php if($val['type']==0){ ?> 
+                    <div><span>第<?=$i?>次配送[<?=$coursename?>]</span><span style="float: right;"><?=$val['createdt']?></span></div>
+             <?php $i++;} ?> 
+             <?php if($val['type']==1){ ?> 
+                    <div><span >第<?=$j?>次退货[<?=$coursename?>]</span><span style="float: right;"><?=$val['createdt']?></span></div>
+             <?php $j++;} ?> 
+            <thead>
+                <th>材料名称</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>单位</th>
+                <th>合计</th>
+            </thead>
+            <tbody>
+             <?php 
+                if(!empty($val['goods'])){
+                    $goodslist=json_decode($val['goods']);
+                        foreach($goodslist as $kk=>$rrs){
+                            $ll=json_decode(json_encode($rrs),TRUE);
+                            if(isset($ll['goods'])){ ?> 
+                                <tr>
+                                    <td><?=$ll['goods']?></td>
+                                    <td><?=$ll['paifanum']?></td>
+                                    <td><?=$ll['unit']?></td>
+                                    <td><?=$ll['price']?></td>
+                                    <td><?=$ll['total']?></td>
+                                </tr>
+                            <?php } ?> 
+                        <tr>
+                            <td ><?=$val['clgysname']?></td>
+                            <td height="34" align="left" class="ys1" style="text-align:center;">合计</td>
+                            <td class="ys2" style="text-align:left;"><?=$val['alltotal']?></td>
+                            <td align="left" class="ys1" style="text-align:center;">商定总价</td>
+                            <td style="text-align:left;"><?=$val['totalprice']?></td>
+                        </tr>
+
+                <?php } ?> 
+            <?php } ?> 
+            <tr>
+            <td colspan="5">
+                
+            <?php 
+                switch ($val['status']) {
+                //0配送申请提交，1材料商已配送，2退货申请提交，3材料商已退货
+                    case '0':
+                        echo '<div style="padding: 8px 10px;color: #1ABC9C;" >配送申请已提交</button>'; 
+                        break;
+                    case '1':
+                        echo '<div style="padding: 8px 10px;color: #1ABC9C;" >材料商已配送</button>'; 
+                        break;
+                    case '2':
+                        echo '<div style="padding: 8px 10px;color: #1ABC9C;" >退货申请已提交</button>'; 
+                        break;
+                    case '3':
+                        echo '<div style="padding: 8px 10px;    color: #1ABC9C;" >材料商已退货</button>'; 
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                } ?> </td>
+            </tr>
+            </tbody>
+        </table> 
+ <?php } ?> 
+ <?php }else{ echo '<div style="overflow:hidden; padding: 50px 10px">暂无配送记录</div>';} ?> 

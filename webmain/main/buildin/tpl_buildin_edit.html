@@ -1,0 +1,871 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+<title><?=$da['title']?></title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="webmain/css/cssm.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/rui.css">
+<link rel="stylesheet" href="webmain/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/webmain.css">
+<link rel="stylesheet" type="text/css" href="web/res/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/iconfont.css?1">
+<link rel="stylesheet" type="text/css" href="webmain/css/log.css">
+<link rel="stylesheet" type="text/css" href="webmain/css/newico/iconfont.css">
+
+<link rel="stylesheet" type="text/css" href="webmain/css/clpaifa.css?2">
+<link rel="stylesheet" href="web/res/mui/css/muipreviewimage.css">
+
+<script language="javascript" src="js/jquery.js"></script>
+<script language="javascript" src="js/js.js?8"></script>
+<style type="text/css">
+    body{background-color: white}
+</style>
+
+<!-- 工地信息 begin  -->
+
+<div class="card">
+        <?php 
+       // var_dump($da['progress']);die;?><!-- 
+        <div class="card-title">
+             <i class="iconfont icon-zhanghao "></i>
+             <span>工地信息</span>
+        </div> -->
+        <div class="card-body">
+            <div class="line-data">业主姓名：<span><?=$gongdiinfo['chuban']?></span></div>
+            <div class="line-data">项目名称：<span><?=$gongdiinfo['title']?></span></div>
+            <div class="line-data">装修地址：<span><?=$gongdiinfo['weizhi']?></span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">
+             <i class="iconfont icon-zhanghao "></i>
+             <span>工程监理信息</span>
+        </div>
+        <div class="card-body">
+            <div class="overhidden H80">
+                <div class="head-portrait">
+                    <img src="images/noface.png">
+                </div>
+                <div class="professional">
+                    <p><?=$gongdiinfo['author']?></p>
+                    <p>联系电话：<?=$mobile?></p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="btn-contact"><a href="tel:<?=$mobile?>" class="hhhh"><i class="iconfont icon-dianhua pR10"></i>联系工程监理</a></div>
+        </div>
+    </div>
+<!-- 工地信息 end  -->
+<div align="center">
+
+
+    <form name="myform">
+        <div style="overflow:hidden; height:20px"></div>
+
+                 <?php 
+                    $anzonly=getconfig('anzonly');
+                    if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+                    <div style="overflow:hidden; height:20px" > <a href="javascript:showAddInput();">添加数据</a></div><?php }?>
+        
+
+        <table bordercolor="#CCCCCC" class="ke-zeroborder" cellpadding="1" border="1" width="100%" style="text-align: center;"  id="table">
+
+            <thead>
+                <th height="34"  style="  min-width: 70PX;">名称</th>
+                <th>数量</th>
+                <th>单位</th>
+                <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                    <th>单价</th>
+                <?php } ?>   
+                <th>型号</th>
+                <th>色号</th>  
+                <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                    <th>小计</th>    
+                <?php } ?>          
+                <th style=" max-width: 181px;">备注</th>
+                 <?php 
+                    if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?><th>操作</th><?php }?>
+                
+            </thead>
+            <tbody>
+             <?php 
+                if(!empty($gongdiinfo['goods'])){
+                    $goodslist=json_decode($gongdiinfo['goods']);
+						if(!empty($goodslist)){
+							foreach($goodslist as $kk=>$rrs){
+								$ll=json_decode(json_encode($rrs),TRUE);
+								if(isset($ll['goods'])&&$ll['goods']!='d'){ ?> 
+									<tr height="34">
+                                        <td><?=$ll['goods']?></td>
+
+                                    <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                                        <td><?=$ll['shijinum']?></td>
+                                        <td><?=$ll['unit']?></td>
+                                        <td><?=$ll['price']?></td>
+                                    <?php }else{ ?> 
+                                        <td><?=$ll['yusuannum']?></td>
+                                        <td><?=$ll['unit']?></td>
+                                    <?php } ?>
+                                        <td><?=$ll['model']?></td>
+                                        <td><?=$ll['color']?></td>
+
+                                    <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                                        <td><?=$ll['total']?></td>
+                                    <?php }?> 
+										<td><?=$ll['explain']?></td>
+
+										 <?php 
+											if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+										<td><a style="color:blue;cursor:pointer;font-size: 4px;" onclick="updateRow(this);" >修改<a> <a style="color:blue;cursor:pointer;;font-size: 4px;" onclick="delRow(this);">删除</a></td><?php }?>
+									</tr>
+								<?php } ?> 
+						<?php } ?> 
+					<?php } ?> 
+                     
+                <tr>
+                    <td colspan="3"><?=$gongdiinfo['clgysname']?></td>
+                    <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                    <td >安装时间</td>
+                        <td colspan="5"  height="34"><?=$gongdiinfo['buildtime']?></td>
+                    <?php }else{ ?> 
+                    <td >测量时间</td>
+                        <td colspan="4"  height="34"><?=$gongdiinfo['buildtime']?></td>
+                    <?php } ?>
+                </tr>    
+
+                <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                    <tr>
+                        <td height="34" align="left" class="ys1" style="text-align:center;">合计</td>
+                        <td class="ys2" colspan="2" id="alltotal">￥<?=$gongdiinfo['alltotal']?></td>
+                        <td align="left" class="ys1" style="text-align:center;">商议价</td>
+                         <td colspan="5">
+                        <?php 
+                        if($adminid!=$gongdiinfo['clgysid']&&$gongdiinfo['progress']!=6){ ?>
+                        <input type="number" name="totalprice" id="totalprice" placeholder="<?=$gongdiinfo['totalprice']?>" value="<?=$gongdiinfo['totalprice']?>">
+                        <input type="hidden" name="type" id="type" placeholder="<?=$gongdiinfo['type']?>" value="<?=$gongdiinfo['type']?>">
+                        <?php }else{ echo "￥".$gongdiinfo['totalprice'];}?>
+                    </td>
+                    </tr>
+                <?php } ?> 
+            <?php } ?> 
+
+
+            
+    <?php 
+    if($adminid==$gongdiinfo['clgysid']&&($gongdiinfo['status']==0||$gongdiinfo['status']==2)){ 
+
+    if($gongdiinfo['cid']!=73){
+       
+        $warning=" <span style='font-size: 16px'>温馨提示：</span><br>
+            <span style='color: gray;font-size: 14px'>&nbsp;&nbsp;&nbsp;&nbsp;尊敬的合作伙伴，为提高安装工程测量进度，与材料商共同协商达成以下制度：
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;一.  材料部预约，提前App下单通知相关材料进行现场测量尺寸。如迟到20分钟以上每次按300元处罚，缺席500元处罚。
+            <br>
+              
+           &nbsp;&nbsp;&nbsp;&nbsp;二.  公司对未及时现场测量完成App任务的，根据App倒计时统计，每延迟一天按300元进行处罚并承担其它损失。现场测量时如有不符合后期安装条件的，当场落实解决方案并配合监督执行，公司不接受任何理由推迟后期安装周期。超出测量周期3日后，公司有权重新选择合作商定制安装产品，对现材料商损失不付任何责任。
+            <br>
+
+           &nbsp;&nbsp;&nbsp;&nbsp;三.  App下单通知日起计算，  <span style='color: red'>".$gongdiinfo['clgysname']."</span>       测量周期为  <span style='color: red'>".$day."</span>   天。现场测量尺寸完成后，材料商在测量周期内第一时间将测量数据及现场记录通过App上传报备材料部，完成App待测量任务后App自动停止倒计时统计。如没及时报备导致后期安装实际数量与App通知测量数据不符合，多出部份公司不予材料商结算，公司只根据通知测量数据费用的70%支付材料商。发现材料商虚报数据的，公司按多出部份的10倍进行处罚，并追究其它损失。
+            <br>
+
+           &nbsp;&nbsp;&nbsp;&nbsp; 四.  材料商务必将物品务必整齐摆放到工地指定的位置。做好文明规范施工，安装完成后保持现场卫生干净整洁，违者按每次200元处罚。
+            <br>
+
+           &nbsp;&nbsp;&nbsp;&nbsp; 五.  其它相关规定与材料商其它协议为准，跪求大家配合。
+            <br></span> 
+            ";
+    }else{
+
+        $warning="
+        <span style='font-size: 16px'>温馨提示：</span><br>
+            <span style='color: gray;font-size: 14px'>
+            &nbsp;&nbsp;&nbsp;&nbsp;尊敬的合作伙伴，为提高安装工程进度，与材料商共同协商达成以下制度：<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;一. 材料部预约，提前App下单通知相关材料进行现场安装。
+            <br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;二. 公司对未及时完成安装和完成App任务的，根据App倒计时统计，每延迟一天按300元进行处罚并承担其它损失。现场安装时如有不符合后期安装条件的，当场落实解决方案并配合监督执行，公司不接受任何理由推迟安装周期。超出安装周期7日后，公司有权重新选择合作商定制安装产品，现材料商无条件3日拆回所有产品，公司不付任何责任。
+            <br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;三. App下单通知日起计算，    <span style='color: red'>".$gongdiinfo['clgysname']."</span>  安装周期为 <span style='color: red'>".$day."</span>天。现场安装完成后，材料商在安装周期内第一时间将安装数据及现场记录通过App上传报备材料部，完成App待安装任务后App自动停止倒计时统计。现场安装未完成，材料商提前点击App完成任务，公司一经发现按1000元每次处罚，并追究延期责任。
+            <br>
+
+           &nbsp;&nbsp;&nbsp;&nbsp; 四. 材料商务必将物品整齐摆放到工地指定的位置。做好文明规范施工，安装完成后保持现场卫生干净整洁，违者按每次200元处罚。
+            <br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp; 五. 其它相关规定与材料商其它协议为准，跪求大家配合。
+            <br></span> 
+            ";
+    }
+?>
+            <tr>
+                <td class="tdys1" colspan="8" style="padding:15px"><div align="left"><?php echo $warning;?></div>
+                <label style="color:#888888;font-size: 10px;line-height: 20px;display: block;width: 100px;margin: 0 auto;"><input name="taskdesc" value="123" type="checkbox" style="margin-top:0px;float: left;">我已阅读并完成</label></td>
+
+            </tr>
+            <tr>
+                <td class="tdys1"><div  align="right" style="color:#555555">备注：</div></td>
+                <td class="tdys1" colspan="8" style="padding:5px"><div align="left"><textarea class="textarea" name="check_explain" style="width:95%;height:60px"  placeholder="现场相关情况说明"></textarea></div></td>
+            </tr>
+            <tr><td class="tdys1">完成凭证：</td>
+                <td colspan="8" class="ys2">
+                <input name="check_fileid" type="hidden" id="fileidview-inputEl" value="">
+                <div id="view_fileidview" style="width:97%;height:80px;border:1px #cccccc solid;color: #757575; background:white;overflow:auto">
+                 <?php if($gongdiinfo['cid'] != 73){ 
+                        echo "请上传现场测量数据。";
+                    }else{
+                        echo "请上传安装完成图片。";
+                    }
+                ?>
+                </div>
+                <div id="fileupaddbtn"><a href="javascript:;" class="blue" onclick="c.upload()"><u>＋添加文件</u></a></div>
+                </td></tr> 
+            <tr>
+
+    <?php }else{ ?> 
+
+            <?php 
+            if(!empty($gongdiinfo['explain'])){ ?>
+                <tr>
+                    <td height="34" style=" min-width: 11px;"class="ys1">材料商备注
+                    </td>
+                    <td colspan="8"><?=$gongdiinfo['explain']?>
+                    </td>
+                </tr> 
+            <?php }     ?>
+
+            <?php 
+            if(!empty($gongdiinfo['xgwj'])){ ?>
+                <tr>
+                    <td height="34" class="ys1">完成凭证
+                    </td>
+                    <td colspan="8" height="34" align="left" class="ys1">
+                    <?php 
+                        $hello = explode(',',$gongdiinfo['xgwj']);
+                        for($index=0;$index<count($hello);$index++) 
+                        { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            }else{
+                                $i2=$i;
+                            }
+                        ?>
+                            <a href="javascript:" onclick="return js.downshow(<?=$hello[$index]?>)" style="color:blue"><u>下载该文件</u></a>
+                            <img src="<?=$i2?>" width="50px" class="showimage"><br> 
+                    <?php 
+                        $i='';
+                        } 
+                    ?>
+                    </td>
+                </tr>
+            <?php }     ?>
+
+    <?php }     ?>
+            </tbody>
+        </table> 
+
+	</div>
+    </form>
+
+
+<?php 
+    if($adminid!=$gongdiinfo['clgysid']){ ?>
+<div style="display:none" id="addinfo">
+<form>
+    <div style="background:white;padding-top:10px">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tbody>
+                <tr>
+                    <td class="lurim" nowrap="">名称:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="goods" placeholder="（手动填写）" id="goods"></div>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+                $anzonly=getconfig('anzonly');
+                 if(in_array($gongdiinfo['cid'], $anzonly)){ ?> 
+                    <tr>
+                        <td class="lurim" nowrap="">实际数量:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="shijinum" placeholder="（手动填写）"  id="shijinum"></div>
+                        </td>
+                    </tr>
+                <?php  } else{ ?>                 
+                    <tr>
+                        <td class="lurim" nowrap="">预算数量:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="yusuannum" placeholder="（手动填写）" id="yusuannum"></div>
+                        </td>
+                    </tr>
+                <?php  } ?>  
+                <tr>
+                    <td class="lurim" nowrap="">单位:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="unit" placeholder="（m、㎡、项、只、扇、套）" id="unit"></div>
+                        </div>
+                    </td>
+                </tr>
+                <?php if(in_array($gongdiinfo['cid'], $anzonly)){ ?>
+                    <tr>
+                        <td class="lurim" nowrap="">单价:</td>
+                        <td width="90%">
+                            <div  class="divinput">
+                                <input class="inputs" type="number" value="" name="price" placeholder="（手动填写）" id="price"></div>
+                        </td>
+                    </tr>
+                <?php  } ?>  
+                <tr>
+                    <td class="lurim" nowrap="">型号:</td>
+                    <td width="90%">
+                        <div class="divinput">
+                            <input class="inputs" type="text" value="" name="model"  placeholder="（手动填写）" id="model"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">色号:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <input class="inputs" type="text" value="" name="color" placeholder="（手动填写）" id="color"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lurim" nowrap="">备注:</td>
+                    <td width="90%">
+                        <div  class="divinput">
+                            <textarea class="textarea" style="height:50px" name="explain" id="explain"></textarea></div>
+                    </td>
+                </tr><button type="reset" style="display:none;"></button> 
+            </tbody>
+            <tfoot>
+            <td class="lurim" nowrap="">&nbsp; </td>
+            <td align="right">
+                <input type="button" class="webbtn" value="保存" onclick="addInfo()" id="btn_add">
+                <input type="button" class="webbtn" value="保存" onclick="updateInfo()" style="display:none" id="btn_update">
+                <input type="button" class="webbtn" value="取消" onclick="hideAddInput()">
+<!-- 
+             <button type="button" class="webbtn" id="addbtn" onClick="buildin.add('form2')">＋添加</button></tfoot>
+            <td align="right"><button type="button" class="webbtn" id="addbtn" onClick="buildin.add('form2')">＋添加</button></tfoot> -->
+        </table>
+    </div>
+</form>
+<?php }?>
+</div>
+        <div style="font-size: 12px;padding: 0 15px;"><span>录 入 员：<?=$gongdiinfo['optname']?></span> </div>
+    <div class="fR" >
+     <?php 
+        if($adminid==$gongdiinfo['clgysid']&&($gongdiinfo['status']==0||$gongdiinfo['status']==2)){ 
+            if($gongdiinfo['type']==0){ ?>
+                <button type="button" class="webbtn" onclick="c.paifa(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);">完成任务</button>
+            <?php }else{ ?> 
+                <button type="button" class="webbtn" onclick="c.paifa(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);">完成任务</button>
+            <?php  
+                }  
+    }else { 
+        $flag=$gongdiinfo['cid'] == 73?'安装':'测量';  
+
+        switch ($gongdiinfo['status']) {
+        //0配送申请提交，1材料商已配送，2退货申请提交，3材料商已退货
+            case '0':
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >'.$flag.'申请提交</button>'; 
+                break;
+            case '1':
+                if($gongdiinfo['progress']==6) echo '<div style="padding: 8px 10px;color: #1ABC9C;" >已取消</button>'; 
+                else echo '<div style="padding: 8px 10px;color: #1ABC9C;" >材料商已'.$flag.'</button>'; 
+                break;
+            case '2':
+                echo '<div style="padding: 8px 10px;color: #1ABC9C;" >'.$flag.'取消申请提交</button>'; 
+                break;
+            case '3':
+                if($gongdiinfo['progress']==6) echo '<div style="padding: 8px 10px;color: #1ABC9C;" >已取消</button>'; 
+                else echo '<div style="padding: 8px 10px;color: #1ABC9C;" >材料商已取消'.$flag.'</button>'; 
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+    } ?> 
+    </div>
+
+     <?php 
+        if($adminid!=$gongdiinfo['clgysid']){ ?>
+            <div class="fR">    
+                <button type="button" id="savebutton" style="display: none" class="webbtn" onclick="c.save(<?=$gongdiinfo['id']?>);">保存修改</button>
+            </div>
+        <?php }
+
+
+        //管理员和徐鹏飞可以取消
+        if($gongdiinfo['status']==0&&($adminid==1||$adminid==10)){ ?> 
+
+            <div><textarea  name="remark" id="remark" placeholder="请说明取消原因" style="
+    width: 400;
+    padding: 10px;
+    margin: 10px;"></textarea></div>
+
+            <div class="cpt-btn fR " onclick="c.cancel(<?=$gongdiinfo['id']?>,<?=$gongdiinfo['type']?>);" style="
+    background-color: #0572ad;
+    padding: 10px;
+    margin-right: 10px;
+    color: white;">取消</div>
+    <?php
+        }
+    ?>
+
+
+</div>
+    <div class="blank10"></div>
+    <div class="blank10"></div>
+    <div class="blank10"></div>
+
+    <?php
+    
+    //$logarr = $gongdiinfo['arr']['logarr'];
+    if($logarr){
+    ?>
+    <div onclick="c.changeshow(0)" class="stitle zhu">工作日志(<?=count($logarr)?>) <img align="absmiddle" height="16" width="16" src="images/xiangyou1.png"> </div>
+    <div id="showrecord0" class="pinglun" style="display:none">
+    <table width="100%">
+    <?php 
+    foreach($logarr as $k=>$rs){
+        $explain=nl2br($rs['explain']); 
+        $s = '<tr valign="top">';
+        $s.= '<td align="center" width="45"><img src="'.$rs['face'].'" class="faces"></td>';
+        $s.= '<td>';
+        $s.= '<div class="name">'.$rs['name'].'<span class="act">['.$rs['actname'].']</span><font color="'.$rs['color'].'">'.$rs['statusname'].'</font></div>';
+        $s.= '<div class="dt">'.$rs['optdt'].'</div>';
+        $s.= '<div class="sm">'.$explain.'</div>';
+        $filed ='';
+        if(!empty($rs['fileid'])){
+            $hello = explode(',',$rs['fileid']); 
+            $s.='<ul class="img-lt">';
+            for($index=0;$index<count($hello);$index++) 
+            { //happy_add   
+                            $i=m('file')->showimage($hello[$index]);
+                            $s.='<li class="animated bounceIn '.$hello[$index].'" id="'.$hello[$index].'" data-id="'.$i.'" style="width:88px; height:88px; padding-left:0px; padding-top:2px;">';
+                            $nnn=explode(".",$i); 
+                            if($nnn[1]=='jpg'||$nnn[1]=='png'||$nnn[1]=='jpeg'){
+                                $i2=$nnn[0].'_s.'.$nnn[1];
+                            $s.= '<img src="'.$i2.'" width="88px"  height="88px" class="showimage"  data-preview-src="'.$i.'" data-preview-group="1" >';
+                            }else if($nnn[1]=='pdf'){
+                                $i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }else{
+                                //$i2=$i;//echo $rs['optdt'].$rs['explain'].$i;
+                                $i2="'http://oa.yuazen.cn/".$nnn[0].".html'";
+                                //$i2="'http://localhost:89/".$nnn[0].".html'";
+
+                                //$s.= '<a href="javascript:" onclick="window.location.href='.$i2.'" style="color:blue"><u>预览文件</u></a><br>';
+                                $s.= '<a href="javascript:" onclick="return js.downshow('.$hello[$index].')" style="color:blue"><u>预览文件</u></a><br>';
+                            }
+                //$s.= '</li>';
+                        $i='';
+                        $i2='';
+                        $nnn='';
+            }
+            $s.='</ul>';
+        }
+
+        $s.= '</td>';
+        $s.= '</tr>';
+        echo $s;
+    }
+    ?>
+    </table>
+    </div>
+    <div class="blank10"></div>
+    <?php }?>
+<script type="text/javascript" src="web/res/js/jquery-rockupload.js"></script>
+
+<script type="text/javascript">
+var anzonly = ['73','135'];
+    
+var c={
+    paifa:function(id,type){
+
+        function _getaolvw(na){
+            var v = '',i,o=$("input[name='"+na+"']");
+            for(i=0;i<o.length;i++)if(o[i].checked)v=o[i].value;
+            return v;
+        }
+
+        var xgwj =form('check_fileid').value;
+        var explain =form('check_explain').value;
+        var taskdesc =_getaolvw('taskdesc');
+        if(taskdesc==''){alert('请仔细阅读温馨提示');return;}
+        if(xgwj==''){alert('请上传相关图片');return;}
+
+
+        $.get(js.getajaxurl('editsave','buildin','main',{id:id,type:type,xgwj:xgwj,explain:explain}), function(da){
+            alert(da);
+            c.refresh();/*
+            var url = 'index.php?a=publicstore&m=buildin&d=main&ajaxbool=true';
+
+            parent.js.location(url);*/
+
+            parent.js.tanclose('clupdatewin');            
+        });
+        return false;
+    var url = 'index.php?m=buildin&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    save:function(id){
+    // console.log(goods,alltotal);
+        if (anzonly.indexOf(cid) > -1) { 
+            pricetotal();
+            totalprice= $('#totalprice').val();
+        }else{goodstotal();}
+
+        type= $('#type').val();
+
+        $.get(js.getajaxurl('editsave2','buildin','main',{id:id,goods:JSON.stringify(goods),alltotal:alltotal,totalprice:totalprice,type:type}), function(da){
+            alert(da);
+           // c.refresh();
+           /*
+            var url = 'index.php?a=publicstore&m=buildin&d=main&ajaxbool=true';
+
+            parent.js.location(url);*/
+
+            parent.js.tanclose('clupdatewin');            
+        });
+        return false;
+    var url = 'index.php?m=buildin&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+        return false;
+    },
+    cancel:function(id,type){
+        var remark =$("#remark").val();
+        if(remark==''){alert('请输入取消原因');return;}
+          var r=confirm("你确定要取消吗？取消后不可恢复")
+          if (r==true)
+            {
+                $.get(js.getajaxurl('cancel','buildin','main',{id:id,type:type,remark:remark}), function(da){
+                    alert("已取消");
+                    c.refresh();
+
+                    parent.js.tanclose('clupdatewin');            
+                });
+            }
+        return false;
+    },
+    tuihuo:function(cid,fid){
+    var url = 'index.php?a=tuihuo&m=buildin&d=public&cid='+cid+'&fid='+fid+'';
+        if(ismobile==1){js.location(url);return;}
+        js.location(url);
+       // js.winiframe('安装测量', url);
+        return false;
+    },
+    refresh:function(){
+        js.msg('wait', '更新中...');
+        $.get(parent.js.getajaxurl('updatedata','buildin','main'), function(da){
+            js.msg('success', da);
+        });
+    },
+    upload:function(){
+        js.upload('',{showid:'fileidview'});
+    },
+    changeshow:function(lx){
+        $('#showrecord'+lx+'').toggle();
+    },
+};
+</script>
+
+<script type="text/javascript">
+   var row = 0 ,cid='<?=$gongdiinfo['cid']?>'; //定义全局行数用于修改
+    var goods = [],alltotal=0,totalprice=0;
+
+var reg_email = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; //用于判断邮箱格式
+var reg_name = /^((\w*\d\w*[a-z]\w*)|(\w*[a-z]\w*\d\w*))$/i; //用于判断用户名格式
+var reg_chinese = /^[\u0391-\uFFE5]+$/ ; //用于判断姓名格式
+var reg_pass = /^((\w*\d\w*[a-z]\w*)|(\w*[a-z]\w*\d\w*))$/i;//用于判断密码格式
+//----获取行号-----
+function getRow(r){
+ var i=r.parentNode.parentNode.rowIndex; 
+ return i ;
+}
+//----获取行号-----
+ 
+//----删除某一行-----
+function delRow(r){ 
+    $('#savebutton').show();
+
+    if(confirm("确定删除该行材料派发?")){ 
+        document.getElementById('table').deleteRow(getRow(r));
+     } 
+    pricetotal();
+
+
+}
+//----删除某一行-----
+ 
+//----清除添加信息框的内容-----
+function cleanAddInput(){
+    document.getElementById('goods').value='';
+    document.getElementById('unit').value='';
+    document.getElementById('model').value='';
+    document.getElementById('color').value='';
+    document.getElementById('explain').value='';
+    // console.log(cid,anzonly,anzonly.indexOf(cid));
+    if (anzonly.indexOf(cid) > -1) {
+        document.getElementById('shijinum').value='';
+        document.getElementById('price').value='';    
+    }else{
+        document.getElementById('yusuannum').value=''; 
+
+    }
+
+}
+//----清除添加信息框的内容-----
+ 
+//----显示添加信息框-----
+function showAddInput(){
+ document.getElementById('addinfo').style="display:block-inline" ;
+ document.getElementById('btn_add').style="display:block-inline" ;
+ document.getElementById('btn_update').style="display:none" ;
+ cleanAddInput(); 
+}
+//----显示添加信息框-----
+ 
+//----隐藏添加信息框-----
+function hideAddInput(){
+ document.getElementById('addinfo').style="display:none" ;
+ $('#savebutton').show();
+ 
+ 
+}
+//----隐藏添加信息框-----
+ 
+//----判断输入框的信息是否符合要求-----
+function judge(){
+ //根据id获取表单信息
+ var goods = document.getElementById('goods').value;
+ var unit = document.getElementById('unit').value;
+ var model = document.getElementById('model').value;
+ var color = document.getElementById('color').value;
+ var explain = document.getElementById('explain').value;
+
+    if (anzonly.indexOf(cid) > -1) {
+        var shijinum = document.getElementById('shijinum').value; 
+        var price = document.getElementById('price').value;
+    }else{
+        var yusuannum = document.getElementById('yusuannum').value;
+    }
+
+ var judge = true ; //用于判断表单信息是否符合
+
+ if(goods==''){
+  judge = false ;
+  alert('请输入材料名称');
+ }else if(unit==''){
+  judge = false ;
+  alert('请输入单位');
+ }else if(model==''){
+  judge = false ;
+  alert('请输入型号');
+ }else if(color==''){
+  judge = false ;
+  alert('请输入色号');
+ }
+   if (anzonly.indexOf(cid) > -1) {
+     if(price==''){
+      judge = false ;
+      alert('请输入单价');
+     }else if(shijinum==''){
+      judge = false ;
+      alert('请输入实际数量');
+     }
+    }else{
+    if(yusuannum==''){
+      judge = false ;
+      alert('请输入预算数量');
+     }
+    }
+
+ return judge ;
+}
+//----判断输入框的信息是否符合要求-----
+ 
+//----新增信息的插入方法-----
+function insertInfo(){
+ //根据id获取表单信息
+ var arr = new Array();
+
+if (anzonly.indexOf(cid) > -1) { 
+ arr[0] = document.getElementById('goods').value;
+ arr[1] = document.getElementById('shijinum').value; 
+ arr[2] = document.getElementById('unit').value;
+ arr[3] = document.getElementById('price').value;
+ arr[4] = document.getElementById('model').value;
+ arr[5] = document.getElementById('color').value;
+ arr[6] = arr[1]*arr[3];
+ arr[7] = document.getElementById('explain').value;
+ arr[8] ="<a style='text-align:center;color:blue;cursor:pointer;' onclick='updateRow(this);'>修改</a> <a style='text-align:center;color:blue;cursor:pointer;' onclick='delRow(this);'>删除</a>";
+}else{
+ arr[0] = document.getElementById('goods').value;
+ arr[1] = document.getElementById('yusuannum').value; 
+ arr[2] = document.getElementById('unit').value;
+ arr[3] = document.getElementById('model').value;
+ arr[4] = document.getElementById('color').value;
+ arr[5] = document.getElementById('explain').value;
+ arr[6] ="<a style='text-align:center;color:blue;cursor:pointer;' onclick='updateRow(this);'>修改</a> <a style='text-align:center;color:blue;cursor:pointer;' onclick='delRow(this);'>删除</a>";
+
+}
+ var x = document.getElementById('table').insertRow(1); //获取第一行对象
+  
+ for(var i=0;i<arr.length;i++){
+  x.insertCell(i).innerHTML = arr[i] ; //用循环把每个数据插入第一行的每一列
+ }
+ $('#savebutton').show();
+
+if (anzonly.indexOf(cid) > -1) { pricetotal();}else{goodstotal();}
+  
+}
+//----新增信息的插入方法-----
+
+//----重新计算总价----- 
+function pricetotal(){
+    var set = [];
+    var i =0,all=0,length=$("#table").find("tr").length;;
+    var d = {};
+    var g = {"0":"goods","1":"shijinum","2":"unit","3":"price","4":"model","5":"color","6":"total","7":"explain"};
+    if (anzonly.indexOf(cid) > -1) { char=2;}else{char=1;}
+
+    $('#table tr').each(function() {
+        var d = {};
+        var j=0 ;
+        if (i<length-char) {
+            $(this).find('td').each(function() { 
+                if (j==6) { price=Number($(this).text());all+=price;}
+                if (j<8) {  d[g[j]] = $(this).text();}
+                j++;
+            });
+        }
+        i++;
+        set.push(d);
+    });
+    $('#alltotal').text('￥'+all);
+    alltotal=all;
+    goods=set;
+}
+//----重新计算总价-----
+
+//----项目合计----- 
+function goodstotal(){
+    var set = [];
+    var i =0,all=0,length=$("#table").find("tr").length;;
+    var d = {};
+    var g = {"0":"goods","1":"yusuannum","2":"unit","3":"model","4":"color","5":"explain"};
+
+    $('#table tr').each(function() {
+        var d = {};
+        var j=0 ;
+        if (i<length-1) {
+            $(this).find('td').each(function() { 
+                if (j<6) {  d[g[j]] = $(this).text();}
+                j++;
+            });
+        }
+        i++;
+        set.push(d);
+    });
+    goods=set;
+}
+//----项目合计-----
+
+//----新增信息-----
+function addInfo(){
+ $('#savebutton').hide();
+  
+ if(judge()==true){
+  alert('添加成功');
+  insertInfo(); //执行插入
+  hideAddInput(); //隐藏添加信息框
+   
+ }else{
+  alert('添加失败');
+ }
+}
+//----新增信息-----
+ 
+ 
+//----根据行号修改信息-----
+function updateRow(r){
+ $('#savebutton').hide();
+
+ row = getRow(r); //把该行号赋值给全局变量
+ showAddInput(); //显示修改表单
+ //提交按钮替换
+ document.getElementById('btn_add').style="display:none" ;
+ document.getElementById('btn_update').style="display:block-inline" ;
+ insertInputFromQuery(queryInfoByRow(row));
+  
+}
+//----根据行号修改信息-----
+ 
+ 
+//----根据行号查信息----
+function queryInfoByRow(r){
+  
+ var arr = new Array();
+if (anzonly.indexOf(cid) > -1) { length=8;}else{length=6;}
+
+ for(var m=0 ; m<length;m++){
+  arr[m] = document.getElementById('table').rows[row].cells[m].innerText;
+ }
+ return arr ; //返回该行数据
+  
+}
+//----根据行号查信息----
+ 
+//----把查询到的信息放入修改的表单里----
+function insertInputFromQuery(arr){
+// console.log(arr);
+if (anzonly.indexOf(cid) > -1) { 
+ document.getElementById('goods').value = arr[0];
+ document.getElementById('shijinum').value = arr[1];
+ document.getElementById('unit').value = arr[2];
+ document.getElementById('price').value = arr[3];
+ document.getElementById('model').value = arr[4];
+ document.getElementById('color').value = arr[5];
+ document.getElementById('explain').value = arr[7];
+}else{
+ document.getElementById('goods').value = arr[0];
+ document.getElementById('yusuannum').value = arr[1];
+ document.getElementById('unit').value = arr[2];
+ document.getElementById('model').value = arr[3];
+ document.getElementById('color').value = arr[4];
+ document.getElementById('explain').value = arr[5];
+
+}
+  
+}
+//----把查询到的信息放入修改的表单里----
+ 
+ 
+function updateInfo(){
+ if(judge()==true){
+  alert('修改成功');
+  document.getElementById('table').deleteRow(row);//删除原来那行  
+  insertInfo(); //插入修改后的值
+  hideAddInput(); //隐藏添加模块
+ }else{
+  alert('修改失败');
+  hideAddInput();
+ }
+}
+</script>
