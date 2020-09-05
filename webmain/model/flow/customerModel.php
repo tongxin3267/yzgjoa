@@ -132,11 +132,20 @@ class flow_customerClassModel extends flowModel
             $yingzhuang=$rs['marker'].$rs['mendian'];
             $ruanzhuang=$ruanzhuang?$rs['rzmarker'] . ' '.$rs['rzmendian']:'无';
             $yingzhuang=$yingzhuang?$rs['marker'] . ' '.$rs['mendian']:'无';
-            $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  | &nbsp;软装跟进人：' .$ruanzhuang.'  &nbsp; &nbsp; </span></div> ';
 
         }
         $rs['optdt']=date("Y-m-d",strtotime($rs['optdt']));
-        $rs['footcon'] = '渠道：'.$rs['laiyuan'] .' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
+
+
+        //供应商取消查看渠道及软装跟进人
+        if (!$this->isincls) {  
+            $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  | &nbsp;软装跟进人：' .$ruanzhuang.'  &nbsp; &nbsp; </span></div> ';
+            $rs['footcon'] = '渠道：'.$rs['laiyuan'] .' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
+        }else{
+           # $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  </div> ';
+            $rs['footcon'] = '硬装跟进人：' . $yingzhuang.' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
+        }
+
 
 
         // var_dump($rs);
@@ -228,7 +237,6 @@ class flow_customerClassModel extends flowModel
         $lxa = explode('_', $lx);
         $lxs = $lxa[0];
         if (isset($lxa[1])) $lx = $lxa[1];
-
         if ($lxs == 'my') {
             $where = '(' . $uid . '=1 or ' . $uid . '=188 or `uid`=' . $uid . ' or ' . $this->rock->dbinstr('shateid', $uid) . ' or ' . $this->rock->dbinstr('gddesignerid', $uid) . ' or ' . $this->rock->dbinstr('rzdesignerid', $uid) . ' or ' . $this->rock->dbinstr('markerid', $uid) . ' or ' . $this->rock->dbinstr('rzmarkerid', $uid) . '  or ' . $this->rock->dbinstr('mendianid', $uid) . ' or ' . $this->rock->dbinstr('rzmendianid', $uid) . ' )';
         }
@@ -354,19 +362,34 @@ class flow_customerClassModel extends flowModel
                 }
             }
             if ($status_chid != '') $status_chid = substr($status_chid, 1);
-            if ($this->isinrz) {
-                $where .= ' and (`rzstatus` in ('.$status_chid.')) ';
-            } else {
 
-                if (!isempt($brandRe) && $brandRe == 2) {
-                    //考虑品牌筛选管理员
-                    $where .= ' and (`rzstatus` in ('.$status_chid.') ) ';
+
+
+            //供应商获取对应供应商状态
+            $table = '';
+            if (!$this->isincls) { 
+                if ($this->isinrz) {
+                    $where .= ' and (`rzstatus` in ('.$status_chid.')) ';
                 } else {
-                    //$where.=' and (`status`='.$status.' or `rzstatus`='.$status.') ';
-                    $where .= ' and (`status` in ('.$status_chid.') ) ';
 
+                    if (!isempt($brandRe) && $brandRe == 2) {
+                        //考虑品牌筛选管理员
+                        $where .= ' and (`rzstatus` in ('.$status_chid.') ) ';
+                    } else {
+                        //$where.=' and (`status`='.$status.' or `rzstatus`='.$status.') ';
+                        $where .= ' and (`status` in ('.$status_chid.') ) ';
+
+                    }
                 }
+            }else{
+
+                //$where.=' and `[Q]customer`.shate like "%'.$supplierName.'%"';
+                $table = '[Q]customer left join `[Q]supplier_customer` on `[Q]supplier_customer`.customer_id=`[Q]customer`.id ';
+
+                $where .= ' and (`[Q]supplier_customer`.`status` in ('.$status_chid.') and `[Q]supplier_customer`.supplier_id='.$uid.')' ;
+                $order='shatedate desc,[Q]customer.status desc';
             }
+
             // var_dump($where);die;
         }
 
@@ -496,6 +519,7 @@ class flow_customerClassModel extends flowModel
         return array(
             'where' => 'and ' . $where,
             'fields' => '*',
+            'table' => $table,
             //'fields'=> 'id,name,status,laiyuan,isgys,optdt,createname,optname,linkname,remark,unitname,shate,tel,type,adddt,moneyz,moneyd,htshu,address',
             'order' => $order
         );

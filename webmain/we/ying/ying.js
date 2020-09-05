@@ -143,11 +143,11 @@ var myScroll=false,yy={
 		$('#menu-btn8').removeClass('hide');
 	}
 
-	//begin 20190421 材料商筛选栏只保留 区域、日期、筛选 crm
+	//begin 20190421 材料商筛选栏只保留 区域、日期、筛选、状态 crm
 	if (isContains(deptname, '供应商') ||isContains(deptname, '供货商') ||isContains(deptname, '合作商') || adminid==clskefuid) {
 		$('#menu-btn6').addClass('hide');
 		$('#menu-btn5').addClass('hide');
-		$('#menu-btn9').addClass('hide');
+		//$('#menu-btn9').addClass('hide');
 		$('#menu-btn10').addClass('hide');
 		$('#menu-btn8').addClass('hide');
 		isshow=false;
