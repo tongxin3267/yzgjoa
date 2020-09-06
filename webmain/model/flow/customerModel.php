@@ -366,7 +366,7 @@ class flow_customerClassModel extends flowModel
 
 
             //供应商获取对应供应商状态
-            $table = '';
+            $table = 'customer';
             if (!$this->isincls) { 
                 if ($this->isinrz) {
                     $where .= ' and (`rzstatus` in ('.$status_chid.')) ';
