@@ -60,7 +60,7 @@ class flow_customerClassModel extends flowModel
         }
 
         //供应商客服只可看硬装状态，供应商取消查看硬装及软装跟进状态
-        if (!$this->isincls) {
+        if (($this->clskefuid !=$this->adminid) &&!$this->isincls) {
             if (!isempt($rs['gddesigner'])) {
                 $rs['designerstatus'] .= '硬装设计师：' . $rs['gddesigner'] . ' &nbsp;|&nbsp;' . $rs['status'] . ' &nbsp; &nbsp; ';
             }else{                
@@ -73,6 +73,10 @@ class flow_customerClassModel extends flowModel
             }else{                
                 $rs['designerstatus'] .= '软装设计师：未安排 &nbsp;|&nbsp;' . $rs['rzstatus'] . '</span>';
             }
+
+
+
+
         }
 
         /*if ($this->isincls) {//没有此字段，，，，，，如果要加的话，需要在获取的地方，关联此表取数据
@@ -84,7 +88,7 @@ class flow_customerClassModel extends flowModel
         }*/
         //显示状态已分享
         if (!isempt($rs['shateid']) && ( $this->adminid== 1 || $this->isinkefu)) {
-            $rs['isshare'] = '  <font  style="font-size: 10px;color:red"> 已分享</font>';
+            $rs['isshare'] = '<i class="iconfont icon-success-fill icon-position shares"></i>';
         }
         $rs['designerstatus'] .= "</span> ";
 
@@ -120,7 +124,8 @@ class flow_customerClassModel extends flowModel
         }
 
         if ( $this->adminid == $this->clskefuid) {
-            $rs['caozuoren'] .= '<div class=""> <span>共享给：' . $rs['shate'] . ' </span> </div> <div class="host-time">'.$rs['optdt'] .' </div> ';
+            $rs['caozuoren'] .= '<div class=""> <span>共享给：' . $rs['shate'] . ' </span> </div>  ';
+            #<div class="host-time">'.$rs['optdt'] .' </div>
         }else{
             /*if (!isempt($rs['marker'])||!isempt($rs['mendian'])) {
                 $rs['caozuoren'] .= '硬装跟进人：' . $rs['marker'] . ' '.$rs['mendian'] .'';
@@ -138,12 +143,23 @@ class flow_customerClassModel extends flowModel
 
 
         //供应商取消查看渠道及软装跟进人
-        if (!$this->isincls) {  
+        if ($this->clskefuid ==$this->adminid) {
+            $rs['footcon'] = '渠道：'.$rs['laiyuan'] .' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
+        }else if (!$this->isincls) {  
             $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  | &nbsp;软装跟进人：' .$ruanzhuang.'  &nbsp; &nbsp; </span></div> ';
             $rs['footcon'] = '渠道：'.$rs['laiyuan'] .' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
         }else{
+
+            if (!isempt($rs['supplier_status'])) {
+                if ($rs['supplier_status'] == '127') {
+                    $sszt = $add;
+                } else {
+                    $sszt = $this->statearr[$rs['supplier_status']];
+                }
+                $rs['supplier_status'] = '<font color="' . $sszt[1] . '">' . $sszt[0] . '</font>';
+            }
            # $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  </div> ';
-            $rs['footcon'] = '硬装跟进人：' . $yingzhuang.' &nbsp;   |  &nbsp; 操作人：'.$rs['optname'] .'   &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
+            $rs['footcon'] = '跟进人：' . $yingzhuang.' &nbsp;   | &nbsp;' . $rs['supplier_status'] . ' &nbsp; &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
         }
 
 
@@ -351,6 +367,19 @@ class flow_customerClassModel extends flowModel
             // $where .= " and (`routeline` like '%$areaSearch%' or `email` like '%$areaSearch%' )";
         }
 
+
+
+
+        if (!$this->isincls) { 
+            $table = 'customer';
+            $fields = '*';
+        }else{
+            //$where.=' and `[Q]customer`.shate like "%'.$supplierName.'%"';
+            $table = '[Q]customer left join `[Q]supplier_customer` on `[Q]supplier_customer`.customer_id=`[Q]customer`.id ';
+            $order='shatedate desc,[Q]customer.status desc';
+            $fields = '*,`[Q]supplier_customer`.`status` as supplier_status';
+        }
+
         if (!isempt($status)) {
 
             $dR = explode(",", $status);
@@ -366,7 +395,6 @@ class flow_customerClassModel extends flowModel
 
 
             //供应商获取对应供应商状态
-            $table = 'customer';
             if (!$this->isincls) { 
                 if ($this->isinrz) {
                     $where .= ' and (`rzstatus` in ('.$status_chid.')) ';
@@ -382,12 +410,7 @@ class flow_customerClassModel extends flowModel
                     }
                 }
             }else{
-
-                //$where.=' and `[Q]customer`.shate like "%'.$supplierName.'%"';
-                $table = '[Q]customer left join `[Q]supplier_customer` on `[Q]supplier_customer`.customer_id=`[Q]customer`.id ';
-
                 $where .= ' and (`[Q]supplier_customer`.`status` in ('.$status_chid.') and `[Q]supplier_customer`.supplier_id='.$uid.')' ;
-                $order='shatedate desc,[Q]customer.status desc';
             }
 
             // var_dump($where);die;
@@ -518,7 +541,7 @@ class flow_customerClassModel extends flowModel
 
         return array(
             'where' => 'and ' . $where,
-            'fields' => '*',
+            'fields' => $fields,
             'table' => $table,
             //'fields'=> 'id,name,status,laiyuan,isgys,optdt,createname,optname,linkname,remark,unitname,shate,tel,type,adddt,moneyz,moneyd,htshu,address',
             'order' => $order

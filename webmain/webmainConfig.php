@@ -10,11 +10,11 @@ return array(
 	//'db_host'	=> 'localhost',	//数据库地址
 	'db_host'	=> '127.0.0.1',	//数据库地址
 	'db_user'	=> 'root',	//数据库用户名
-	'db_pass'	=> 'yzgj1988',	//数据库密码
-	'db_base'	=> 'yzoa',	//数据库名称
+	'db_pass'	=> 'root',	//数据库密码
+	'db_base'	=> 'yzgjoa',	//数据库名称
 	'perfix'	=> 'xinhu_',	//数据库表名前缀
 	'qom'	=> 'xinhu_',	//session、cookie前缀
-	'highpass'	=> 'byzlshw2019',	//超级管理员密码，可用于登录任何帐号  jkljkl111
+	'highpass'	=> '123456',	//超级管理员密码，可用于登录任何帐号  jkljkl111
 	'db_drive'	=> 'mysqli',	//操作数据库驱动有mysql,mysqli,pdo三种
 	'randkey'	=> 'iarjsyuxmhnwbfvpczgoletdqk',	//系统随机字符串密钥
 	'asynkey'	=> '91df91c1edd3ea7657a1ae42f7cb7945',	//这是异步任务key
@@ -104,6 +104,8 @@ return array(
         'changedesigner'=>"1,15,25,21,22,23,26,63,64",//设计师
         'changeauthor'=>"1,8,37,27,29,37,65",//工程监理、安装工
         'changehtys'=>"1,18",//预算员
+        // 共享        
+        'changeclgys'=>"1,45,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,115,102,103,104,105,106,107,108,109,110,111,112,113,114",//供应商
     ),//每个字段对应的部门id 
 
 
