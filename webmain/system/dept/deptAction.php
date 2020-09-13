@@ -114,7 +114,12 @@ class deptClassAction extends Action
         $dept_fields = getconfig('dept_fields');
         $fields = $this->rock->post('dept_fields');
     	$dept_id = $dept_fields[$fields];
-        if ($fields=='undefined' || empty($dept_id)) {
+        if ($fields=='undefined'){
+	    	$dept_id = $dept_fields['changeclgys'];
+	        $where = " id in( ".$dept_id.") ";
+	        $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
+	    	
+        }else if(empty($dept_id)) {
         	$where="1=1";
 	        $where2 = " `status`=1 ";
         }else{

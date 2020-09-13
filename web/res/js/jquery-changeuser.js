@@ -187,7 +187,7 @@
 		
 		this._loaddata=function(){
 			var o1 = $('#showdiv'+rand+'_0'),url;
-			if (this.dept_fields='undefined') {this.dept_fields='changeclgys'}
+			// if (this.dept_fields='undefined') {this.dept_fields='changeclgys'}
 			// console.log(this.dept_fields);
 			o1.html('<div align="center" style="padding:30px"><img src="images/mloading.gif"></div>');
 			if(js.getajaxurl){

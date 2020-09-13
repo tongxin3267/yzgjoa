@@ -5,8 +5,8 @@ class flow_customerClassModel extends flowModel
     public function initModel()
     {
         //0|待量单,1|无效单,2|已退单,3|重单,4|跟进单,5|意向单,6|失败单,7|已签单,8|待定单
-        //$this->statearr		 = c('array')->strtoarray('停用|#888888,启用|green');
-        //$this->statearr		 = c('array')->strtoarray('退单|#888888,签单中|green,已签单|green,量房|green,装修完成|green');
+        //$this->statearr        = c('array')->strtoarray('停用|#888888,启用|green');
+        //$this->statearr        = c('array')->strtoarray('退单|#888888,签单中|green,已签单|green,量房|green,装修完成|green');
         $this->statearr = c('array')->strtoarray('待量单|#888888,无效单|green,已退单|green,重单|green,跟进单|green,意向单|green,失败单|green,已签单|green,待定单|green');
         $this->brandarr = c('array')->strtoarray('元贞国际|#888888,贞筑豪宅|#888888,梦依达|#888888,域嘉|#888888,元贞局装|#888888');
         //11.OA［形象建设部］［预算部］开工信息表业主号码隐藏或乱码。
@@ -247,8 +247,8 @@ class flow_customerClassModel extends flowModel
     protected function flowbillwhere($uid, $lx)
     {
         $where = '(' . $uid . '=1 or ' . $uid . '=188 or `uid`=' . $uid . ' or ' . $this->rock->dbinstr('shateid', $uid) . ' or ' . $this->rock->dbinstr('gddesignerid', $uid) . ' or ' . $this->rock->dbinstr('rzdesignerid', $uid) . ' or ' . $this->rock->dbinstr('markerid', $uid) . ' or ' . $this->rock->dbinstr('rzmarkerid', $uid) . ' or ' . $this->rock->dbinstr('mendianid', $uid) . ' or ' . $this->rock->dbinstr('rzmendianid', $uid) . ' )';
-        //$where 	= '`uid`='.$uid.' or shateid in ('.$uid.') ';
-        //$where 	= '`uid`='.$uid.' and `status`=1';
+        //$where    = '`uid`='.$uid.' or shateid in ('.$uid.') ';
+        //$where    = '`uid`='.$uid.' and `status`=1';
         $key = $this->rock->post('key');
         $lxa = explode('_', $lx);
         $lxs = $lxa[0];
@@ -377,7 +377,7 @@ class flow_customerClassModel extends flowModel
             //$where.=' and `[Q]customer`.shate like "%'.$supplierName.'%"';
             $table = '[Q]customer left join `[Q]supplier_customer` on `[Q]supplier_customer`.customer_id=`[Q]customer`.id ';
             $order='shatedate desc,[Q]customer.status desc';
-            $fields = '*,`[Q]supplier_customer`.`status` as supplier_status';
+            $fields = '[Q]customer.*,`[Q]supplier_customer`.`status` as supplier_status';
         }
 
         if (!isempt($status)) {
@@ -489,8 +489,8 @@ class flow_customerClassModel extends flowModel
         }
         if (!isempt($desginRecord)) {
             //$where.=" and (`shate` like '%$desginRecord%')";
-            //$where	= $this->rock->dbinstr('shate', $desginRecord);
-            //$where	= $this->rock->dbinstr('gddesigner', $desginRecord);
+            //$where    = $this->rock->dbinstr('shate', $desginRecord);
+            //$where    = $this->rock->dbinstr('gddesigner', $desginRecord);
 
             $dR = explode(",", $desginRecord);
             $str="";
