@@ -93,7 +93,7 @@ $(document).ready(function(){
 	}
 
 
-	function isContains(str, substr) {
+	function isContains(str, substr) { 
 	    return str.indexOf(substr) >= 0;
 	}
 	if (isContains(deptallname, '设计部')||deptname=='工程监理部'||deptname.indexOf("市场部")>=0) {
