@@ -47,6 +47,20 @@ $(document).ready(function(){
 			btn(true);
 		}
 	});
+
+	function isContains(str, substr) {
+	    return str.indexOf(substr) >= 0;
+	}
+	if (isContains(deptallname, '供应商') || isContains(deptallname, '供货商')) {
+		$('#designer{rand}').addClass('hide');
+		$('#manager{rand}').addClass('hide');
+		//crm
+		$('#shichang{rand}').addClass('hide');
+		$('#laiyuanRecord{rand}').addClass('hide');
+		$('#progress{rand}').addClass('hide');
+		$('#designer{rand}').addClass('hide');
+		$('#brandRecord{rand}').addClass('hide');
+	}
 		var at = $('#optionview_{rand}').bootstree({
 		url:js.getajaxurl('loadbookdatacourse','flow','main',{'setid':'45'}),
 		columns:[{

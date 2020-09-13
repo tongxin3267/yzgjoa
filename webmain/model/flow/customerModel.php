@@ -157,6 +157,9 @@ class flow_customerClassModel extends flowModel
                     $sszt = $this->statearr[$rs['supplier_status']];
                 }
                 $rs['supplier_status'] = '<font color="' . $sszt[1] . '">' . $sszt[0] . '</font>';
+            }else{
+
+                $rs['supplier_status'] = '<font color="#888888"> 暂未跟进</font>';
             }
            # $rs['caozuoren'] .= '<div class=""> <span>硬装跟进人：' . $yingzhuang.' </span>    &nbsp;  </div> ';
             $rs['footcon'] = '跟进人：' . $yingzhuang.' &nbsp;   | &nbsp;' . $rs['supplier_status'] . ' &nbsp; &nbsp;  | &nbsp; <span style="color: #aaaaaa;">  '.$rs['optdt'] .'</span>';
@@ -469,7 +472,7 @@ class flow_customerClassModel extends flowModel
         } else if (!isempt($timeRecord) && $timeRecord == '全部') {
         } else {
             $year = date('Y');
-            if ($clskefuid!=$this->adminid) {
+            if ($clskefuid!=$this->adminid || $this->isincls) {
                 $where .= " and (`adddt` > '$year')";
             }
         }

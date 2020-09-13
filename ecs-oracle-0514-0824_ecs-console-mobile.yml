@@ -5,7 +5,7 @@ metadata:
   #名称
   name: ecs-console-mobile
   #命名空间
-  namespace: ecs-oracle-0514-0824
+  namespace: ecs-mysql-0514
 spec:
   #配置标记k8s1.16必填
   selector:
@@ -34,14 +34,13 @@ spec:
         #应用
         app: ecs-console-mobile
         #版本
-        version: release200831121811
+        version: release200706203916
         #项目端口
-        projectPort: p_12357
+        projectPort: p_12204
     #规格
-    spec:
       #调度规则,指定部署在指定标签节点中  调度key: 调度值 默认为rancher compute=true标签主机
       nodeSelector:
-        51ykb.com:  ecs
+        51ykb.com: ecs
       #容器拉取权限
       imagePullSecrets:
         - name : ykb
@@ -53,7 +52,7 @@ spec:
         command:
         - "mkdir"
         - "-p"
-        - "/data/apache-tomcat-8.5.50/logs/12357/"
+        - "/data/apache-tomcat-8.5.50/logs/12204/"
         volumeMounts:
         - name: logs
           mountPath: /data/apache-tomcat-8.5.50/logs
@@ -62,20 +61,20 @@ spec:
         #名称
       - name: ecs-console-mobile
         #镜像
-        image: uhub.service.ucloud.cn/ykb_release/ecs-console-mobile:release200831121811
+        image: uhub.service.ucloud.cn/ykb_release/ecs-console-mobile:release200706203916
         #镜像挂载目录
         volumeMounts:
         - name: time
           mountPath: /etc/localtime
         - name: logs
-          mountPath: /data/apache-tomcat-8.5.50/logs/12357
-          subPath: "12357"
+          mountPath: /data/apache-tomcat-8.5.50/logs/12204
+          subPath: "12204"
         #计算资源配置
         resources:
           #启动限制
           requests:
             #初始化CPU用量
-            cpu: "100m"
+            cpu: "0"
             #初始化内存用量
             memory: "2048Mi"
           #最大限制
@@ -83,7 +82,6 @@ spec:
             #限制CPU最大用量
             cpu: "2048m"
             #限制内存最大用量
-            memory: "2048Mi"
         #环境变量
         env:
         #堆内存
@@ -115,6 +113,5 @@ spec:
         hostPath:
           path: /etc/localtime
       - name: logs
-        nfs:
-          server: 10.10.53.143
-          path: /
+        persistentVolumeClaim:
+          claimName: tomcat-logs

@@ -62,7 +62,37 @@ $(document).ready(function(){
 		
 		//$('#list').remove();
 	}
-	
+	// console.log(deptname);
+
+	if (isContains(deptallname, '供应商') || isContains(deptallname, '供货商')) {
+		$('#designer{rand}').addClass('hide');
+		$('#manager{rand}').addClass('hide');
+		//crm
+		$('#shichang{rand}').addClass('hide');
+		$('#laiyuan{rand}').addClass('hide');
+		$('#progress{rand}').addClass('hide');
+		$('#designer{rand}').addClass('hide');
+		$('#brandRecord{rand}').addClass('hide');
+		//crm
+		$('#status{rand}').addClass('hide');
+		columns=[{
+			text:'',dataIndex:'caozuo'
+		},{
+			text:'工作日志',dataIndex:'record'
+		},{
+			text:'渠道',dataIndex:'laiyuan'
+		},{
+			text:'ID',dataIndex:'mobile'
+		},{
+			text:'品牌',dataIndex:'yzbrand'
+		},{
+			text:'客户姓名',dataIndex:'name'
+		},{
+			text:'联系方式',dataIndex:'tel'
+		}];
+	}
+
+
 	function isContains(str, substr) {
 	    return str.indexOf(substr) >= 0;
 	}
