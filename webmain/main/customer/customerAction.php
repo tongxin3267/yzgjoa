@@ -122,6 +122,10 @@ class customerClassAction extends Action
 	//happy_add 异步获取统计数据
 	public function loadDataAction()
 	{
+        $this->admininfo = $this->db->getone('[Q]admin', $this->adminid, 'id,name,deptid,deptname,ranking,superid,superpath,deptpath,superman');
+        $this->clsdeptid = getconfig('clsdeptid');
+        $this->isincls = in_array($this->admininfo['deptid'], $this->clsdeptid);
+
 		$this->title = '统计分析';
 		// $where	= "(uid=".$this->adminid." or ".$this->adminid."=1  or ".$this->adminid."=188 or ".$this->rock->dbinstr('shateid', $this->adminid).")";
 		$where	= "(uid=".$this->adminid." or ".$this->adminid."=1 or ".$this->adminid."=188 or ".$this->rock->dbinstr('shateid', $this->adminid).' or '.$this->rock->dbinstr('gddesignerid', $this->adminid).' or '.$this->rock->dbinstr('rzdesignerid', $this->adminid).' or '.$this->rock->dbinstr('markerid',$this->adminid).'  or '.$this->rock->dbinstr('rzmarkerid',$this->adminid).'  or '.$this->rock->dbinstr('rzmendianid',$this->adminid).' or '.$this->rock->dbinstr('mendianid', $this->adminid)." or (".$this->adminid."=513  and `shateid` is not null))";
@@ -185,7 +189,17 @@ class customerClassAction extends Action
 			$where.=" and (`unitname` like '%$unitnameRecord%' or `zxstyle` like '%$unitnameRecord%' or `linkname`='$unitnameRecord')";
 		}
 
-		$rows 	= $this->db->getall('SELECT status,laiyuan,count(*) ta,group_concat(laiyuan) FROM `[Q]customer` where '.$where.' GROUP BY status');
+		if ($this->isincls) {
+
+            $table = '[Q]customer left join `[Q]supplier_customer` on `[Q]supplier_customer`.customer_id=`[Q]customer`.id ';
+			$where.=" and supplier_id = ".$this->adminid."";
+            $fields = 'laiyuan,count(*) ta,group_concat(laiyuan),`[Q]supplier_customer`.`status` as status';
+			$rows 	= $this->db->getall('SELECT '.$fields.' FROM '.$table.' where '.$where.' GROUP BY status');
+			
+		}else{
+			$rows 	= $this->db->getall('SELECT status,laiyuan,count(*) ta,group_concat(laiyuan) FROM `[Q]customer` where '.$where.' GROUP BY status');
+		}
+
 		//$rows 	= $this->db->getall('SELECT status,laiyuan,count(*) ta,group_concat(laiyuan) FROM `[Q]customer`  GROUP BY status');
 		//$rows 	= $this->db->getmou("[Q]customer","status,laiyuan,count(*) ta,group_concat(laiyuan)","uid='$this->adminid' GROUP BY status");
 		//$rows 	= $this->db->getall("[Q]customer","status,laiyuan,count(*) ta,group_concat(laiyuan)","(uid='$this->adminid' or '$this->adminid'=1) GROUP BY status");
