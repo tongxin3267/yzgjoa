@@ -107,6 +107,12 @@ function optmenuclass(o1,num,id,obj,mname,oi,rgfeeid){
         var lx = d.lx;if(!lx)lx=0;
         // console.log(d);
         this.num_menu= num;
+        if(lx==123){
+            js.changeCustStatus(d,'请选择状态：',function(text,supplierId){
+                js.changeSupplierCustomerStatus(d, text,supplierId);
+            });
+            return;
+        }
         if(lx==1234){
             js.changeStatus(d,'请选择状态：',function(text,supplierId){
                 js.changeCustomerStatus(d, text,supplierId);
@@ -266,10 +272,50 @@ js.changeStatus = function (d, msg, fun, nr) {
     },'get,json');
 
 }
+js.changeCustStatus = function (d, msg, fun, nr) {
+    loadDVal = d;
+    var msg = '<div align="left"><table width="100%" border="0" cellspacing="0" cellpadding="0">' +
+        '<tbody>' +
+        '<tr class="spstatus"><td class="lurim" nowrap="">跟进状态:</td><td width="90%">' + '<div id="div_status1" class="divinput">' +
+        '<select id="spstatus" name="spstatus" class="inputs"><option value="">-请选择-</option><option value="0" selected="">待量单</option>' +
+        '<option value="1">无效单</option><option value="2">已退单</option><option value="3">重单</option><option value="4">跟进单</option>' +
+        '<option value="5">意向单</option><option value="6">失败单</option><option value="7">已签单</option><option value="8">待定单</option></select>' +
+        '</div></td></tr>' +
+        '</tbody></table></div>';
+
+    js.prompt(d.name,  msg, function(index, text){
+        if(index=='yes'){
+            fun(get('spstatus').value);
+        }
+    },'');
+    $("#confirm_input").hide();
+    $(".rockmenu").hide();            
+    /*var url=js.apiurl("customerStatus","getCustomerAllStatus");  
+    js.ajax(url,d,function(ret){       
+        var obj = eval(ret.data);
+        $("#spstatus").val(obj.status);
+        if (obj.yzbrand==0) {
+            $(".rzstatus").hide();
+        }else if (obj.yzbrand==2) {
+            $(".yzstatus").hide();            
+        }
+    },'get,json');*/
+
+}
+
 js.changeCustomerStatus=function(d,status,rzstatus){   
     d.status = status;
     d.rzstatus = rzstatus;
     var url=js.apiurl("customerStatus","changeCustStatus");  
+    js.ajax(url,d,function(ret){       
+        console.log(ret)   
+    },'get,json');
+}
+
+
+js.changeSupplierCustomerStatus=function(d,status,rzstatus){   
+    d.status = status;
+    var url=js.apiurl("customerStatus","changeCustomerStatus");  
     js.ajax(url,d,function(ret){       
         console.log(ret)   
     },'get,json');

@@ -530,6 +530,7 @@ class flowbillClassModel extends Model
 				'num' 	=> $rs['num'],
 				'chuban' 		=> $rers['chuban'],
 				'yzbrand' 		=> $rers['yzbrand'],
+				'supplier_status' 		=> $rers['supplier_status'],
 				'footcon'		=> $rers['footcon'],
 				'dif' 		=> $dif,
 				'ishui' 	=> $ishui,

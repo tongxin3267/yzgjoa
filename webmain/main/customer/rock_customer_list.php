@@ -74,7 +74,7 @@ $(document).ready(function(){
 		$('#designer{rand}').addClass('hide');
 		$('#brandRecord{rand}').addClass('hide');
 		//crm
-		$('#status{rand}').addClass('hide');
+		//$('#status{rand}').addClass('hide');
 		columns=[{
 			text:'',dataIndex:'caozuo'
 		},{
@@ -87,6 +87,8 @@ $(document).ready(function(){
 			text:'品牌',dataIndex:'yzbrand'
 		},{
 			text:'客户姓名',dataIndex:'name'
+		},{
+			text:'状态',dataIndex:'supplier_status',sortable:true
 		},{
 			text:'联系方式',dataIndex:'tel'
 		}];
