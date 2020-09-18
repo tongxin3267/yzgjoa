@@ -188,10 +188,10 @@
 		this._loaddata=function(){
 			var o1 = $('#showdiv'+rand+'_0'),url;
 			// if (this.dept_fields='undefined') {this.dept_fields='changeclgys'}
-			// console.log(this.dept_fields);
+			// console.log(this.title);
 			o1.html('<div align="center" style="padding:30px"><img src="images/mloading.gif"></div>');
 			if(js.getajaxurl){
-				url = js.getajaxurl('deptuserjson','dept','system',{'dept_fields':this.dept_fields});
+				url = js.getajaxurl('deptuserjson','dept','system',{'dept_fields':this.dept_fields,'title':this.title});
 			}else{
 				url = js.apiurl('dept','data',{callback:'?'});
 			}

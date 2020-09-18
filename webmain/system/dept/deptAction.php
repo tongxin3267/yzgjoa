@@ -113,8 +113,9 @@ class deptClassAction extends Action
 	{
         $dept_fields = getconfig('dept_fields');
         $fields = $this->rock->post('dept_fields');
+        $title = $this->rock->post('title');
     	$dept_id = $dept_fields[$fields];
-        if ($fields=='undefined'){
+        if ($fields=='undefined'&&$title=='共享给...'){
 	    	$dept_id = $dept_fields['changeclgys'];
 	        $where = " id in( ".$dept_id.") ";
 	        $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
