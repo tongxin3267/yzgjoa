@@ -115,17 +115,23 @@ class deptClassAction extends Action
         $fields = $this->rock->post('dept_fields');
         $title = $this->rock->post('title');
     	$dept_id = $dept_fields[$fields];
+    	$dept_fields2 = substr($dept_id,2);
+    	$where="1=1";
+        $where2 = " `status`=1 ";
+
         if ($fields=='undefined'&&$title=='共享给...'){
 	    	$dept_id = $dept_fields['changeclgys'];
-	        $where = " id in( ".$dept_id.") ";
-	        $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
+        	$dept_fields2 = substr($dept_id,2);
+	        $where = " id in( ".$dept_id.")  or  pid in( ".$dept_fields2.")";
+			#$deptarr 	= m('dept')->getdata($where);
+			#$deptiiiid = array_column($deptarr, 'id');
+       		#$all_deptiiiid = implode(",",$deptiiiid);
+
+	        // $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
 	    	
-        }else if(empty($dept_id)) {
-        	$where="1=1";
-	        $where2 = " `status`=1 ";
         }else{
-	        $where = " id in( ".$dept_id.") ";
-	        $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
+	        $where = " id in( ".$dept_id.")  or  pid in( ".$dept_fields2.")";
+	        // $where2 = " `status`=1  and deptid in( ".$dept_id.") ";
         }
 		$deptarr 	= m('dept')->getdata($where);
 		$userarr 	= m('admin')->getuser(1,$where2);
